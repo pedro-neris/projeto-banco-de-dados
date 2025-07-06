@@ -49,7 +49,6 @@ CREATE TABLE Setor
 (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50),
-    telefone VARCHAR(25) UNIQUE,
     id_campus INT NOT NULL REFERENCES Campus(id) ON DELETE CASCADE,
     UNIQUE (nome, id_campus)
 );

@@ -17,11 +17,27 @@ export class PratoService {
   }
   async findAllPratos(): Promise<Prato[]> {
     const result = await this.db.query('SELECT * FROM Prato');
-    return result.rows as Prato[];
+    return result.rows.map(prato => ({
+      ...prato,
+      icone: prato.icone ? prato.icone.toString('base64') : null,
+    }));
   }
 
   async findInfoPrato(): Promise<infoPrato[]> {
     const result = await this.db.query('SELECT * FROM media_prato');
-    return result.rows as infoPrato[];
+     return result.rows.map(prato => ({
+      ...prato,
+      icone: prato.icone ? prato.icone.toString('base64') : null,
+    }));
+  }
+  async findInfoPratoById(id: number): Promise<infoPrato | null> {
+    const result = await this.db.query(
+      'SELECT * FROM media_prato WHERE id = $1',
+      [id],
+    );
+    return result.rows[0].map(prato => ({
+      ...prato,
+      icone: prato.icone ? prato.icone.toString('base64') : null,
+    })) as infoPrato ?? null;
   }
 }

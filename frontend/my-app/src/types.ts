@@ -55,3 +55,10 @@ export interface Comentario {
     id_avaliacao: number;
     id_usuario: number;
 }
+
+export interface infoPrato {
+    nome: string,
+    qtd_avaliacoes: number,
+    media_avaliacoes: number,
+    icone?: string | null;
+}

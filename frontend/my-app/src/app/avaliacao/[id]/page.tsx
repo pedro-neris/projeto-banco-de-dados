@@ -120,19 +120,6 @@ export default function AvaliacaoDetailPage() {
         fetchUserComentarios();
     }, [comentarios]);
 
-    const handleDeleteAval = async () => {
-        const confirmDelete = window.confirm("Tem certeza que deseja excluir esta avaliação? Esta ação não pode ser desfeita.");
-        if (confirmDelete) {
-            try {
-                axios.delete(`http://localhost:3000/avaliacao/${avaliacao?.id}`)
-                toast.success("Avaliação excluída com sucesso!");
-                router.push('/feed');
-            }
-            catch (error: any) {
-                toast.error("Erro ao excluir avaliação.");
-            }
-        }
-    }
     const handleDeleteComentario = async (comentarioId: number) => {
         const confirmDelete = window.confirm("Tem certeza que deseja excluir este comentário? Esta ação não pode ser desfeita");
         if (confirmDelete) {
@@ -203,13 +190,13 @@ export default function AvaliacaoDetailPage() {
     );
 
     const modalEditComentario = () => (
-        <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-[#4a71ff] p-6 rounded-lg w-96 max-w-[90%]">
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+            <div className="h-auto text-black w-[60%] flex flex-col mx-auto bg-[#4a71ff] rounded-md items-center">
                 <div className="flex flex-col h-[12rem] w-full bg-[#A4FED3] rounded-md">
                     <textarea
                         maxLength={500}
-                        value={textoEditComentario}
                         onChange={(event) => setTextoEditComentario(event.target.value)}
+                        placeholder="Digite seu comentário..."
                         className="text-black h-full shadow-sm placeholder-black placeholder-opacity-50 mt-2 pt-[2px] border-none pl-[1rem] bg-[#A4FED3] leading-tight focus:outline-none w-full p-2 resize-none overflow-y-auto border rounded-md"
                     />
                 </div>

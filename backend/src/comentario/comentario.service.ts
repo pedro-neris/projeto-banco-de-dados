@@ -21,7 +21,7 @@ export class ComentarioService {
       createComentarioDto.id_usuario,
     );
     if (!userExists) {
-      throw new ConflictException('Não existe usuário com esse email');
+      throw new NotFoundException('Não existe usuário com esse id');
     }
     const avaliacaoExists = await this.avaliacaoService.findAvaliacaoById(
       createComentarioDto.id_avaliacao,
@@ -70,7 +70,7 @@ export class ComentarioService {
       updatedComentario.id_usuario,
     );
     if (!userExists) {
-      throw new ConflictException('Não existe usuário com esse email');
+      throw new ConflictException('Não existe usuário com esse id');
     }
     const avaliacaoExists = await this.avaliacaoService.findAvaliacaoById(
       updatedComentario.id_avaliacao,

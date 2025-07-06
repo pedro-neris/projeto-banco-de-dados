@@ -6,6 +6,7 @@ import {
 import { DatabaseService } from '../database/database.service';
 import { UserService } from 'src/user/user.service';
 import { SetorService } from 'src/setor/setor.service';
+import { CampusService } from 'src/campus/campus.service';
 import { CreateFeedbackDto } from './dto/CreateFeedbackDto';
 import { UpdateFeedbackDto } from './dto/UpdateFeedbackDto';
 import { Feedback } from './feedback.entity';
@@ -13,7 +14,7 @@ import { Feedback } from './feedback.entity';
 export class FeedbackService {
   constructor(private db: DatabaseService) { }
   userService = new UserService(this.db);
-  setorService = new SetorService(this.db);
+  setorService = new SetorService(this.db,);
 
   async findOne(id: number): Promise<Feedback | null> {
     const result = await this.db.query(
@@ -37,7 +38,7 @@ export class FeedbackService {
     const userExists = await this.userService.findUserById(newFeedback.id_usuario);
     const setorExists = await this.setorService.findOneSetor(newFeedback.id_setor);
     if (!userExists) {
-      throw new ConflictException('Não existe usuário com esse email');
+      throw new NotFoundException('Não existe usuário com esse id');
     }
     else if (!setorExists) {
       throw new NotFoundException('Setor não encontrado');

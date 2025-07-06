@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { Setor } from './setor.entity';
+import { CampusService } from 'src/campus/campus.service';
 @Injectable()
 export class SetorService {
-  constructor(private db: DatabaseService) { }
-
+  constructor(private db: DatabaseService  ) { }
+  campusService: CampusService = new CampusService(this.db);
   async findOneSetor(id: number): Promise<Setor | null> {
     const result = await this.db.query(
       'SELECT * FROM Setor WHERE id = $1',
@@ -17,6 +18,10 @@ export class SetorService {
     return result.rows as Setor[];
   }
   async findSetoresByCampus(idCampus: number): Promise<Setor[]> {
+    const campusExists = this.campusService.findOneCampus(idCampus);
+    if (!campusExists) {
+      throw new NotFoundException('Campus não encontrado');
+    }
     const result = await this.db.query(
       'SELECT * FROM Setor WHERE id_campus = $1',
       [idCampus],

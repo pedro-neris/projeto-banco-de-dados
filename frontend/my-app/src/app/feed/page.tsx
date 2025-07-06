@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import HeaderLogado from '../../components/headers/logado';
 import HeaderDeslogado from '@/components/headers/deslogado';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
-import { Campus, Feedback, Prato, Setor, User, Avaliacao } from '@/types';
+import { Campus, Feedback, Prato, Setor, User, Avaliacao, infoPrato } from '@/types';
 
 export default function FeedPage() {
     const router = useRouter();
@@ -27,6 +27,21 @@ export default function FeedPage() {
     const [dataConsumoAvaliacao, setdataConsumoAvaliacao] = useState<Date | null>(null);
     const [pratoAvaliacao, setPratoAvaliacao] = useState<Prato | null>(null);
     const [isModalAvaliacaoOpen, setIsModalAvaliacaoOpen] = useState(false);
+    const [infoPrato, setInfoPrato] = useState<infoPrato[]>([]);
+
+    useEffect(() => {
+        const fetchInfoPrato = async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/prato/info");
+                setInfoPrato(response.data);
+            } catch (error) {
+                toast.error("Erro ao buscar informações dos pratos");
+            }
+        };
+
+        fetchInfoPrato();
+    }, []);
+
     useEffect(() => {
         const fetchPratos = async () => {
             try {
@@ -405,6 +420,41 @@ export default function FeedPage() {
                         className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4 cursor-pointer'>
                         Nova avaliação
                     </button>
+                </div>                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4'>
+                    {infoPrato.map((prato, index) => (
+                        <div key={index} className="w-[300px] h-[90px] border-2 border-blue-500 flex bg-white">
+                            <div className="flex flex-col justify-between flex-[5] text-sm p-2">
+                                <div className="font-bold text-gray-800">
+                                    {prato.nome}
+                                </div>
+                                <div className="text-gray-600">
+                                    Avaliações: {prato.qtd_avaliacoes}
+                                </div>
+                                <div className="text-gray-600">
+                                    Nota Média: {prato.media_avaliacoes ? Number(prato.media_avaliacoes).toFixed(2) : 'N/A'}
+                                </div>
+                            </div>
+                            <div className="flex-[2] bg-white flex items-center justify-center">
+                                {prato.icone ? (
+                                    <img 
+                                        src={`data:imagem/png;base64,${prato.icone}`}
+                                        alt={`${prato.nome}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="text-white text-xs text-center p-1">
+                                        Sem imagem
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                    {infoPrato.length === 0 && (
+                                          <div className="text-center text-gray-600 text-xl mt-20">
+                        <p>Nenhum prato cadastrado.</p>
+                    </div>
+
+                    )}
                 </div>
             </div>
         );
