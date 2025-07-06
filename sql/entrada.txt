@@ -1,0 +1,9 @@
+./imagens-pratos/arroz-com-ovo.png, Arroz com ovo
+./imagens-pratos/feijoada.jpg, Feijoada
+./imagens-pratos/frango-grelhado.jpg, Frango grelhado
+./imagens-pratos/lasanha-vegetariana.jpg, Lasanha vegetariana
+./imagens-pratos/macarrao-a-bolonhesa.jpg, Macarrao a bolonhesa
+./imagens-pratos/pao-integral-com-queijo.png, Pao integral com queijo
+./imagens-pratos/salada.jpg, Salada
+./imagens-pratos/sopa-de-legumes.png, Sopa de legumes
+./imagens-pratos/strogonoff-de-frango.png, Strogonoff-de-frango.png
