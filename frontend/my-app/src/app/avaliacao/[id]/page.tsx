@@ -75,10 +75,12 @@ export default function AvaliacaoDetailPage() {
         setIsModalCreateComentarioOpen(!isModalCreateComentarioOpen);
         setTextoNovoComentario('');
     };
-
-    const toggleModalEditComentario = () => {
-        setIsModalEditComentarioOpen(!isModalEditComentarioOpen);
+    const resetEditComentarioFields = () => {
         setTextoEditComentario('');
+        setIdComentarioEdit(null);
+    }
+    const toggleModalEditComentario = () => {
+        setIsModalEditComentarioOpen(!isModalEditComentarioOpen)
     }
 
     const handleCreateComentario = async () => {
@@ -125,8 +127,10 @@ export default function AvaliacaoDetailPage() {
         if (confirmDelete) {
             try {
                 await axios.delete(`http://localhost:3000/comentario/${comentarioId}`);
-                toast.success("Comentário excluído com sucesso!");
-                window.location.reload();
+                toast.success("Comentário excluído com sucesso!",{autoClose:800});
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             } catch (error: any) {
                 toast.error("Erro ao excluir comentário.");
             }
@@ -145,7 +149,10 @@ export default function AvaliacaoDetailPage() {
                     id_usuario: userInfo?.id
                 })
                 toggleModalEditComentario();
-                toast.success("Comentário editado com sucesso!");
+                toast.success("Comentário editado com sucesso!",{autoClose:800});
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             }
             catch {
                 toast.error("Erro ao editar comentário.");
@@ -194,6 +201,7 @@ export default function AvaliacaoDetailPage() {
             <div className="h-auto text-black w-[60%] flex flex-col mx-auto bg-[#4a71ff] rounded-md items-center">
                 <div className="flex flex-col h-[12rem] w-full bg-[#A4FED3] rounded-md">
                     <textarea
+                        value= {textoEditComentario}
                         maxLength={500}
                         onChange={(event) => setTextoEditComentario(event.target.value)}
                         placeholder="Digite seu comentário..."
@@ -214,7 +222,7 @@ export default function AvaliacaoDetailPage() {
                         </button>
 
                         <button
-                            onClick={toggleModalEditComentario}
+                            onClick={() => { toggleModalEditComentario(); resetEditComentarioFields(); }}
                             className="bg-white text-[#4a71ff] border border-[#4a71ff] rounded-lg px-4 py-2 hover:bg-red-500 hover:text-white transition-all"
                         >
                             Cancelar

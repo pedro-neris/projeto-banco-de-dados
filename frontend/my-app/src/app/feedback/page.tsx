@@ -74,8 +74,7 @@ export default function UserFeedback() {
                     const response = await axios.get(`http://localhost:3000/setor/${feedback.id_setor}`);
                     const nomeSetor = response.data.nome;
                     setNomeSetores(prev => new Map(prev).set(feedback.id, nomeSetor));
-                    console.log("Setor object:", response.data)
-                    const idCampus = response.data.idcampus;
+                    const idCampus = response.data.id_campus;
                     const campus = await axios.get(`http://localhost:3000/campus/${idCampus}`);
                     const nomeCampus = campus.data.nome;
                     setNomeCampus(prev => new Map(prev).set(feedback.id_setor, nomeCampus));

@@ -49,6 +49,9 @@ export default function Perfil() {
     }
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const confirm = window.confirm("Tem certeza que deseja editar suas informações?");
+        if (confirm) {
+        
         try {
             const updateUser = {
                 email: formEdit.email,
@@ -86,7 +89,7 @@ export default function Perfil() {
                 toast.error("Erro ao atualizar informações do usuário.");
             }
         }
-    }
+    }}
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {

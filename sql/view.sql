@@ -1,5 +1,5 @@
 CREATE VIEW media_prato AS
-SELECT prato.nome, prato.icone, count (avaliacao.id) AS qtd_avaliacoes, AVG (avaliacao.nota) AS media_avaliacoes
+SELECT prato.id, prato.nome, prato.icone, count (avaliacao.id) AS qtd_avaliacoes, AVG (avaliacao.nota) AS media_avaliacoes
 FROM prato
 LEFT JOIN
 avaliacao  ON

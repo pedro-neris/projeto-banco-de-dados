@@ -34,6 +34,14 @@ export class AvaliacaoService {
         return result.rows as Avaliacao[];
     }
 
+    async findAvalsFromPrato(id_prato: number): Promise<Avaliacao[]> {
+        const result = await this.db.query(
+            'SELECT * FROM avaliacao WHERE id_prato = $1',
+            [id_prato],
+        );
+        return result.rows as Avaliacao[];
+    }
+
     async createAvaliacao(newAvaliacao: CreateAvaliacaoDto) {
         const userExists = await this.userService.findUserById(newAvaliacao.id_usuario);
         if (!userExists) {
