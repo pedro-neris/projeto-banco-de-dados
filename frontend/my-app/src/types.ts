@@ -61,5 +61,6 @@ export interface infoPrato {
     nome: string,
     qtd_avaliacoes: number,
     media_avaliacoes: number,
-    icone?: string | null;
+    icone?: string | null,
+    qtd_cardapios: number;
 }
