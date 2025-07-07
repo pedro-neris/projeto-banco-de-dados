@@ -19,7 +19,7 @@ BEGIN
     WHERE id = new_aval_id_usuario;
 
     IF usuario_existe = 0 THEN
-        RAISE EXCEPTION 'Usuário não existe.', new_aval_id_usuario;
+        RAISE EXCEPTION 'Usuário não existe.';
     END IF;
 
 
@@ -28,7 +28,7 @@ BEGIN
     WHERE id = new_aval_id_prato;
 
     IF prato_existe = 0 THEN
-        RAISE EXCEPTION 'Prato não existe.', new_aval_id_prato;
+        RAISE EXCEPTION 'Prato não existe.';
     END IF;
 
     
@@ -42,12 +42,12 @@ BEGIN
 
 
     IF new_aval_tipo_refeicao NOT IN ('Almoço', 'Café da manhã', 'Janta') THEN
-        RAISE EXCEPTION 'Tipo de refeição inválido. Deve ser Almoço, Café da manhã ou Janta.', new_aval_tipo_refeicao;
+        RAISE EXCEPTION 'Tipo de refeição inválido. Deve ser Almoço, Café da manhã ou Janta.';
     END IF;
 
 
     IF new_aval_nota_avaliacao < 0 OR new_aval_nota_avaliacao > 5 THEN
-        RAISE EXCEPTION 'Nota inválida. Deve estar entre 0 e 5.', new_aval_nota_avaliacao;
+        RAISE EXCEPTION 'Nota inválida. Deve estar entre 0 e 5.';
     END IF;
 
 
