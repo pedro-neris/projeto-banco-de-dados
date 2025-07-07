@@ -1,25 +1,45 @@
-CREATE PROCEDURE InserirAvaliacao(
-    IN email_usuario VARCHAR,
-    IN nome_prato VARCHAR,
-    IN data_consumo DATE,
-    IN data_avaliacao DATE,
-    IN tipo_refeicao VARCHAR,
-    IN texto_avaliacao TEXT,
-    IN nota_avalicao INT
+CREATE PROCEDURE inserir_avaliacao(
+    IN new_aval_id_usuario INTEGER,
+    IN new_aval_id_prato INTEGER,
+    IN new_aval_data_consumo DATE,
+    IN new_aval_data_avaliacao DATE,
+    IN new_aval_tipo_refeicao VARCHAR(50),
+    IN new_aval_texto_avaliacao TEXT,
+    IN new_aval_nota_avaliacao INTEGER
 )
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    avaliacao_existe INTEGER;
 BEGIN
-    DECLARE avaliacao_existe INT;
     SELECT COUNT(*) INTO avaliacao_existe
-    FROM Avaliacoes
-    WHERE email = email_usuario
-    AND nomePrato = nome_prato
-    AND dataConsumo = data_consumo
-    AND refeicao = tipo_refeicao;
+    FROM Avaliacao
+    WHERE id_usuario = new_aval_id_usuario
+      AND id_prato = new_aval_id_prato
+      AND data_consumo = new_aval_data_consumo
+      AND refeicao = new_aval_tipo_refeicao;
 
-    IF avaliacao_existente = 0 THEN
-        INSERT INTO Avaliacoes (email, nomePrato, dataConsumo, nota, texto, refeicao, dataAvaliacao)
-        VALUES (email_usuario, nome_prato, data_consumo, nota_avalicao, texto_avaliacao, tipo_refeicao, data_avaliacao);
+    IF avaliacao_existe = 0 THEN
+        INSERT INTO Avaliacao (
+            id_usuario, 
+            id_prato, 
+            data_consumo, 
+            data_avaliacao, 
+            refeicao, 
+            texto, 
+            nota
+        )
+        VALUES (
+            new_aval_id_usuario, 
+            new_aval_id_prato, 
+            new_aval_data_consumo, 
+            new_aval_data_avaliacao, 
+            new_aval_tipo_refeicao, 
+            new_aval_texto_avaliacao, 
+            new_aval_nota_avaliacao
+        );
+        RAISE NOTICE 'Avaliação inserida com sucesso.';
     ELSE
-        SELECT 'Este prato já foi avaliado.';
+        RAISE NOTICE 'Este prato já foi avaliado para esta refeição nesta data.';
     END IF;
-END
+END;
