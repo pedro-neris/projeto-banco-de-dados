@@ -467,7 +467,7 @@ export default function FeedPage() {
                 </div>               
                 <div className='grid grid-cols-4 gap-2 p-4'>
                     {infoPrato.map((prato) => (
-                        <div key={prato.id} className="w-[300px] h-[110px] border-2 border-blue-500 flex bg-white">
+                        <div key={prato.id} className="w-[300px] h-[110px] border-2 border-blue-500 flex bg-white hover:scale-105 transition-all cursor-pointer" onClick={() => router.push(`/prato/info/${prato.id}`)}>
                             <div className="flex flex-col justify-between flex-[3] text-sm p-2">
                                 <div className="font-bold text-gray-800">
                                     {prato.nome}
