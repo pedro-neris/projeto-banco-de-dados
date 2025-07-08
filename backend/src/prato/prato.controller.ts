@@ -31,6 +31,6 @@ async findAll() : Promise<Prato[]> {
 
 @Get('info/:id')
   async findAllInfoPratoById(@Param('id', ParseIntPipe) id: number): Promise<infoPrato | null> {
-  return this.pratoService.findAllInfoPratoById(id);
+  return this.pratoService.findInfoPratoById(id);
 }
 }

@@ -35,10 +35,11 @@ export class PratoService {
       'SELECT * FROM media_prato WHERE id = $1',
       [id],
     );
-    return result.rows[0].map(prato => ({
-      ...prato,
-      icone: prato.icone ? prato.icone.toString('base64') : null,
-    })) as infoPrato ?? null;
+    const prato = result.rows[0];
+    return {
+    ...prato,
+    icone: prato.icone ? prato.icone.toString('base64') : null,
+    } as infoPrato;
   }
 
 async findAllInfoPratoById(id: number): Promise<infoPrato | null> {
