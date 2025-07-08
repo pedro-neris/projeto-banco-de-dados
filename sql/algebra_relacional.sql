@@ -60,7 +60,7 @@ WHERE r.id IN (
     INNER JOIN prato p ON a.id_prato = p.id
     INNER JOIN cardapio_prato cp ON p.id = cp.id_prato
     INNER JOIN cardapio_restaurante cr ON cp.id_cardapio = cr.id_cardapio
-    WHERE a.data_avaliacao >= CURRENT_DATE - INTERVAL '1 month'
+    WHERE a.data_avaliacao >= CURRENT_DATE - INTERVAL '30 days'
 );
 
 
