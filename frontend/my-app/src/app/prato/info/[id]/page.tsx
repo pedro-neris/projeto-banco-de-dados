@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 import HeaderLogado from '@/components/headers/logado';
 import HeaderDeslogado from '@/components/headers/deslogado';
-import { Prato, Setor, User, Avaliacao, infoPrato } from '@/types';
+import { Prato, User, Avaliacao, infoPrato } from '@/types';
 
 export default function PratoPage() {
   const { id } = useParams();
@@ -90,7 +90,8 @@ export default function PratoPage() {
       resetAvaliacaoModalFields();
       setTimeout(() => {
         toggleModalAvaliacao();
-      }, 500);
+        window.location.reload();
+      }, 1000);
     } catch {
       toast.error("Erro ao criar avaliação. Por favor, tente novamente.");
     }
