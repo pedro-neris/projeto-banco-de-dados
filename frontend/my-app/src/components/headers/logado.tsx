@@ -1,8 +1,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { toast } from 'react-toastify';
-import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 import logoUnb from '@/components/logo unb.png';
 import { useRouter } from 'next/navigation';
 
@@ -32,7 +30,7 @@ export default function header_logado() {
                     <button>
                         <Link
                             href="/avaliacao"
-                            className="flex items-center bg-white text-black rounded-[60px] px-4 py-2 hover:bg-blue-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
                         >
                             Minhas avaliações
                         </Link>
@@ -40,7 +38,7 @@ export default function header_logado() {
                                         <button>
                         <Link
                             href="/feedback"
-                            className="flex items-center bg-white text-black rounded-[60px] px-4 py-2 hover:bg-blue-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
                         >
                             Meus feedbacks
                         </Link>
@@ -50,21 +48,21 @@ export default function header_logado() {
                     <button>
                         <Link
                             href="/perfil"
-                            className="flex items-center bg-white text-black rounded-[60px] px-4 py-2 hover:bg-blue-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
                         >
                             Editar perfil
                         </Link>
                     </button>
                     <button
-                        className="flex items-center bg-white text-black rounded-[60px] px-4 py-2 hover:bg-blue-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
                         onClick={() => {
                             localStorage.removeItem("token");
                             setTimeout(() => {
-                                window.location.reload();
+                                router.push('/feed');
                             }, 1000);
                         }}
                     >
-                        <ArrowRightOnRectangleIcon className="h-6 w-6 text-black cursor-pointer" />
+                        Sair
                     </button>
                     </div>
                 </div>

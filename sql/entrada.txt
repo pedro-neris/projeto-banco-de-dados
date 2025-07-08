@@ -1,5 +1,5 @@
 ./imagens-pratos/arroz-com-ovo.png, Arroz com ovo
-./imagens-pratos/feijoada.jpg, Feijoada
+./imagens-pratos/feijoada.png, Feijoada
 ./imagens-pratos/frango-grelhado.jpg, Frango grelhado
 ./imagens-pratos/lasanha-vegetariana.jpg, Lasanha vegetariana
 ./imagens-pratos/pao-de-queijo.png, Pão de queijo

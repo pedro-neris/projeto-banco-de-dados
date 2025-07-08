@@ -498,13 +498,13 @@ export default function singleAvalPage() {
                                         <div className="flex flex-row items-center space-x-4">
                                             <div className="flex flex-col items-center">
                                                 <span className="font-sans text-[#71767B] text-sm font-bold leading-[16.94px] mb-1">Usuário</span>
-                                                <span className="font-sans text-[#222E50] text-sm font-[350] leading-[16.94px]">
+                                                <span className="font-sans text-black text-sm font-[350] leading-[16.94px]">
                                                     {userComentarios.get(comentario.id)?.username || ''}
                                                 </span>
                                             </div>
                                             <div className="flex flex-col items-center">
                                                 <span className="font-sans text-[#71767B] text-sm font-bold leading-[16.94px] mb-1">Data</span>
-                                                <span className="font-sans text-[#222E50] text-sm font-[350] leading-[16.94px]">
+                                                <span className="font-sans text-black text-sm font-[350] leading-[16.94px]">
                                                     {new Date(comentario.data).toLocaleString().split(',')[0]}
                                                 </span>
                                             </div>

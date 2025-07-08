@@ -22,14 +22,15 @@ export default function header_deslogado() {
                             className="w-20 h-10 cursor-pointer ml-5 shadow-md"
                         />
                     </Link>
-                    <h2 className='text-2xl font-bold text-black'>
+                    <h2 className='text-2xl font-bold text-black cursor-pointer'
+                        onClick={() => router.push('/feed')}>
                         Feed
                     </h2>
 
                     </div>
                     <div className="flex flex-row items-center space-x-2 mr-2">
                     <button
-                        className="flex items-center bg-white text-black rounded-[60px] px-4 py-2 hover:bg-blue-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
                         onClick={() => {
                             router.push('/login');
                         }}
@@ -37,7 +38,7 @@ export default function header_deslogado() {
                         Login
                     </button>
                     <button
-                        className="flex items-center bg-white text-black rounded-[60px] px-4 py-2 hover:bg-blue-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
                         onClick={() => {
                             router.push('/cadastro');
                         }}

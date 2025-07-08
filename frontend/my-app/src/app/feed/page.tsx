@@ -405,7 +405,7 @@ export default function FeedPage() {
                 </div>
                 <div className='grid grid-cols-4 gap-2 p-4'>
                     {infoPrato.map((prato) => (
-                        <div key={prato.id} className="w-[300px] h-[110px] border-2 border-blue-500 flex bg-white">
+                        <div key={prato.id} className="w-[300px] h-[110px] border-2 border-blue-500 flex bg-white hover:scale-105 transition-all cursor-pointer" onClick={() => router.push(`/prato/info/${prato.id}`)}>
                             <div className="flex flex-col justify-between flex-[3] text-sm p-2">
                                 <div className="font-bold text-gray-800">
                                     {prato.nome}
@@ -418,8 +418,10 @@ export default function FeedPage() {
                                 </div>
                                                             <button 
                             className="bg-blue-500 hover:bg-blue-700 w-[60%] text-white font-bold rounded cursor-pointer mt-2 mb-2 ml-2"
-                            onClick={() => router.push('/login')}>
-                                Avaliar
+                                onClick={(event) => {
+                                    event.stopPropagation(); 
+                                    router.push('/login');
+                                }}>
                             </button>
 
                             </div>
@@ -480,11 +482,12 @@ export default function FeedPage() {
                                 </div>
                                                             <button 
                             className="bg-blue-500 hover:bg-blue-700 w-[60%] text-white font-bold rounded cursor-pointer mt-2 mb-2 ml-2"
-                            onClick={() => {
-                                const selectedPrato = pratos.find((pratoLoop) => pratoLoop.nome === prato.nome) || null;
-                                setPratoAvaliacao(selectedPrato);
-                                toggleModalAvaliacao();
-                            }}>
+                                onClick={(event) => {
+                                    event.stopPropagation(); 
+                                    const selectedPrato = pratos.find((pratoLoop) => pratoLoop.nome === prato.nome) || null;
+                                    setPratoAvaliacao(selectedPrato);
+                                    toggleModalAvaliacao();
+                                }}>
                                 Avaliar
                             </button>
 

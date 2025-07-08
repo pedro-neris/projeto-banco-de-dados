@@ -17,6 +17,7 @@ export default function PratoPage() {
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [prato, setPrato] = useState<infoPrato | null>(null);
   const [loading, setLoading] = useState(true);
+  //const params = useParams();
 
   // Estados do modal de avaliação
   const [pratos, setPratos] = useState<Prato[]>([]);
@@ -27,7 +28,7 @@ export default function PratoPage() {
   const [dataConsumoAvaliacao, setdataConsumoAvaliacao] = useState<Date | null>(null);
   const [pratoAvaliacao, setPratoAvaliacao] = useState<Prato | null>(null);
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
-
+  const [userAvaliacoes, setUserAvaliacao] = useState<Map<number, User>>(new Map());
   // Autenticação e carregamento inicial
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -40,13 +41,19 @@ export default function PratoPage() {
   }, []);
 
   useEffect(() => {
-    if (!id) return;
-    axios.get(`http://localhost:3000/prato/info/${id}`)
-      .then(res => setPrato(res.data))
-      .catch(() => toast.error("Erro ao buscar prato."))
-      .finally(() => setLoading(false));
-
-    axios.get(`http://localhost:3000/prato`).then(res => setPratos(res.data));
+    const fetchPratoInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/prato/info/${id}`);
+        console.log(response.data);
+        setPrato(response.data);
+      } catch {
+        toast.error("Erro ao buscar prato.");
+      } finally {
+        setLoading(false);
+      }
+      axios.get(`http://localhost:3000/prato`).then(res => setPratos(res.data));
+    };
+    fetchPratoInfo();
   }, [id]);
 
   useEffect(() => {
@@ -56,6 +63,17 @@ export default function PratoPage() {
       .then(res => setAvaliacoes(res.data))
       .catch(() => toast.error("Erro ao buscar avaliações."));
   }, [id]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      for (const avaliacao of avaliacoes) {
+        const userId = avaliacao.id_usuario;
+        const userResponse = await axios.get(`http://localhost:3000/user/${userId}`);
+        setUserAvaliacao(prev => new Map(prev).set(avaliacao.id, userResponse.data));
+      }
+    };
+    fetchUsers();
+  }, [avaliacoes]);
 
   const resetAvaliacaoModalFields = () => {
     setTextoAvaliacao("");
@@ -200,34 +218,63 @@ export default function PratoPage() {
       <div className="min-h-screen bg-gray-100">
         <HeaderDeslogado />
         <div className="flex justify-center mt-4">
-          <button onClick={() => router.push('/login')} className="text-white text-xl font-bold mb-4">Nova avaliação</button>
+          <button onClick={() => router.push('/login')} className="bg-blue-500 text-white px-4 py-2 rounded">Nova avaliação</button>
         </div>
-        <div className="mt-6">
-          <h3 className="text-lg font-bold mb-2">Avaliações</h3>
-          {avaliacoes.length > 0 ? (
-            avaliacoes.map((avaliacao, index) => (
-              <div key={index} className="border-t border-gray-200 py-2">
+      <div className="flex justify-center items-center mt-10">
+        {loading ? (
+          <p>Carregando prato...</p>
+        ) : prato ? (
+          <div className="flex border border-blue-500 rounded p-4 max-w-lg w-full bg-white">
+            <div className="flex-1 mr-20">
+              <h2 className="text-xl font-bold mb-2">{prato.nome}</h2>
+              <p>Avaliações: {prato.qtd_avaliacoes}</p>
+              <p>Nota Média: {prato.media_avaliacoes ? Number(prato.media_avaliacoes).toFixed(2) : 'N/A'}</p>
+            </div>
+                            <div className="flex-[2] bg-white flex items-center justify-center">
+                                {prato.icone ? (
+                                    <img 
+                                        src={`data:;base64,${prato.icone}`}
+                                        alt={`${prato.nome}`}
+                                        className="w-full h-full"
+                                    />
+                                ) : (
+                                    <div className="text-black text-sm text-center p-1">
+                                        Sem imagem
+                                    </div>
+                                )}
+                            </div>
+          </div>
+        ) : (
+          <p>Prato não encontrado.</p>
+        )}
+      </div>
+      <div className="mt-6 px-8">
+        {avaliacoes.length > 0 ? (
+          <div
+            className={`mt-6 ${avaliacoes.length >= 3 ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' : 'flex justify-center'
+              }`}
+          >
+            {avaliacoes.map((avaliacao, index) => (
+              <div key={index}
+                className="flex flex-col border border-blue-500 rounded p-4 max-w-150 w-full bg-amber-50 m-2 hover:scale-105 transition-all cursor-pointer"
+                onClick={() => {
+                    router.push(`http://localhost:3001/avaliacao/${avaliacao.id}`);
+                }}>
+                <p className="text-2xl mb-4"> {userAvaliacoes.get(avaliacao.id)?.username ?? ""} </p>
+                <p><strong>Data da Avaliação:</strong> {new Date(avaliacao.data_avaliacao).toLocaleDateString('pt-BR')}</p>
+                <p><strong>Refeição:</strong> {avaliacao.refeicao}</p>
+                <p><strong>Data do Consumo:</strong> {new Date(avaliacao.data_consumo).toLocaleDateString('pt-BR')}</p>
                 <p><strong>Nota:</strong> {avaliacao.nota}</p>
-                <p><strong>Comentário:</strong> {avaliacao.texto}</p>
-                <p><strong>Data Consumo:</strong> {avaliacao.data_consumo}</p>
+                <p><strong>Texto:</strong> {avaliacao.texto}</p>
               </div>
-            ))
-          ) : (
-            <p>Sem avaliações disponíveis.</p>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="flex justify-center">Prato não possui avaliações.</p>
+        )}
+      </div>
       </div>
     );
-  }
-
-  function bufferToBase64(buffer: { type: string; data: number[] }) {
-    let binary = '';
-    const bytes = new Uint8Array(buffer.data);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
   }
 
   return (
@@ -248,19 +295,19 @@ export default function PratoPage() {
               <p>Avaliações: {prato.qtd_avaliacoes}</p>
               <p>Nota Média: {prato.media_avaliacoes ? Number(prato.media_avaliacoes).toFixed(2) : 'N/A'}</p>
             </div>
-            <div className="flex-[2] bg-white flex items-center justify-center">
-              {prato.icone ? (
-                <img
-                  src={`data:image/png;base64,${bufferToBase64(prato.icone)}`}
-                  alt={prato.nome}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="text-white text-xs text-center p-1">
-                  Sem imagem
-                </div>
-              )}
-            </div>
+                            <div className="flex-[2] bg-white flex items-center justify-center">
+                                {prato.icone ? (
+                                    <img 
+                                        src={`data:;base64,${prato.icone}`}
+                                        alt={`${prato.nome}`}
+                                        className="w-full h-full"
+                                    />
+                                ) : (
+                                    <div className="text-black text-sm text-center p-1">
+                                        Sem imagem
+                                    </div>
+                                )}
+                            </div>
           </div>
         ) : (
           <p>Prato não encontrado.</p>
@@ -276,23 +323,19 @@ export default function PratoPage() {
               <div key={index}
                 className="flex flex-col border border-blue-500 rounded p-4 max-w-150 w-full bg-amber-50 m-2 hover:scale-105 transition-all cursor-pointer"
                 onClick={() => {
-                  if (avaliacao.id_usuario === userInfo?.id) {
-                    router.push('http://localhost:3001/avaliacao');
-                  } else {
-                    router.push(`/prato/info/${prato.id}`);
-                  }
+                    router.push(`http://localhost:3001/avaliacao/${avaliacao.id}`);
                 }}>
-                <p className="text-2xl mb-4">{avaliacao.nome_usuario}</p>
+                <p className="text-2xl mb-4"> {userAvaliacoes.get(avaliacao.id)?.username ?? ""} </p>
                 <p><strong>Data da Avaliação:</strong> {new Date(avaliacao.data_avaliacao).toLocaleDateString('pt-BR')}</p>
                 <p><strong>Refeição:</strong> {avaliacao.refeicao}</p>
                 <p><strong>Data do Consumo:</strong> {new Date(avaliacao.data_consumo).toLocaleDateString('pt-BR')}</p>
                 <p><strong>Nota:</strong> {avaliacao.nota}</p>
-                <p><strong>Comentário:</strong> {avaliacao.texto}</p>
+                <p><strong>Texto:</strong> {avaliacao.texto}</p>
               </div>
             ))}
           </div>
         ) : (
-          <p className="flex justify-center">Sem avaliações disponíveis.</p>
+          <p className="flex justify-center">Prato não possui avaliações.</p>
         )}
       </div>
     </div>
