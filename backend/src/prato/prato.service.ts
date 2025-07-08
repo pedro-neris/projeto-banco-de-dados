@@ -40,4 +40,29 @@ export class PratoService {
       icone: prato.icone ? prato.icone.toString('base64') : null,
     })) as infoPrato ?? null;
   }
+
+async findAllInfoPratoById(id: number): Promise<infoPrato | null> {
+  const result = await this.db.query(
+    `
+    SELECT 
+      p.id,
+      p.nome,
+      p.icone,
+      COUNT(a.id) AS qtd_avaliacoes,
+      AVG(a.nota) AS media_avaliacoes,
+      (
+        SELECT COUNT(*) 
+        FROM cardapio_prato cp 
+        WHERE cp.id_prato = p.id
+      ) AS qtd_cardapios
+    FROM prato p
+    LEFT JOIN avaliacao a ON a.id_prato = p.id
+    WHERE p.id = $1
+    GROUP BY p.id, p.nome, p.icone
+    `,
+    [id]
+  );
+
+  return result.rows[0] || null;
+}
 }

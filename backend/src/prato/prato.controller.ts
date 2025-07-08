@@ -27,4 +27,10 @@ async findAll() : Promise<Prato[]> {
   async findInfoPrato(): Promise<infoPrato[]>{
     return this.pratoService.findInfoPrato();
   }
+
+
+@Get('info/:id')
+  async findAllInfoPratoById(@Param('id', ParseIntPipe) id: number): Promise<infoPrato | null> {
+  return this.pratoService.findAllInfoPratoById(id);
+}
 }

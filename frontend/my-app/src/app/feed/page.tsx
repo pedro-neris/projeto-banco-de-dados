@@ -422,7 +422,7 @@ export default function FeedPage() {
                     </button>
                 </div>                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4'>
                     {infoPrato.map((prato, index) => (
-                        <div key={index} className="w-[300px] h-[90px] border-2 border-blue-500 flex bg-white">
+                        <div key={index} className="w-[300px] h-[90px] border-2 border-blue-500 flex bg-white hover:scale-105 transition-all cursor-pointer" onClick={() => router.push(`/prato/info/${prato.id}`)}>
                             <div className="flex flex-col justify-between flex-[5] text-sm p-2">
                                 <div className="font-bold text-gray-800">
                                     {prato.nome}
