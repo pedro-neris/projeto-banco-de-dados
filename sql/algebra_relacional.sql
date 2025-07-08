@@ -1,70 +1,87 @@
+-- Alterações no Banco de Dados para as views da Álgebra Relacional retonem pelo menos 1 resultado
+UPDATE ingrediente
+SET nome = 'Farinha'
+WHERE id = 6;
+
+UPDATE cardapio
+SET especial = 'Natal'
+WHERE id in (4, 5);
+
 -- Consulta 1
-CREATE VIEW RestaurantesSemGluten AS
+CREATE VIEW restaurantes_com_gluten AS
 SELECT DISTINCT 
     r.num_restaurante,
-    c.nome_campus
+    c.nome
 FROM 
     ingrediente i
-INNER JOIN ingrediente_prato ip ON i.id_ingrediente = ip.id_ingrediente
-INNER JOIN prato p ON ip.id_prato = p.id_prato
-INNER JOIN cardapio_prato cp ON p.id_prato = cp.id_prato
+INNER JOIN ingrediente_prato ip ON i.id = ip.id_ingrediente
+INNER JOIN prato p ON ip.id_prato = p.id
+INNER JOIN cardapio_prato cp ON p.id = cp.id_prato
 INNER JOIN cardapio_restaurante cr ON cp.id_cardapio = cr.id_cardapio
-INNER JOIN restaurante r ON cr.id_restaurante = r.id_restaurante
-INNER JOIN campus c ON r.id_campus = c.id_campus
+INNER JOIN restaurante r ON cr.id_restaurante = r.id
+INNER JOIN campus c ON r.id_campus = c.id
 WHERE 
-    i.restricao = 'sem glúten';
+    i.restricao = 'Glúten';
 
 
 -- Consulta 2
-CREATE VIEW UsuariosComentaramSobremesa AS
+CREATE VIEW usuarios_comentaram_vegano AS
 SELECT DISTINCT 
     u.username
 FROM 
     usuario u
-INNER JOIN comentario c ON u.id_usuario = c.id_usuario
-INNER JOIN avaliacao a ON c.id_avaliacao = a.id_avaliacao
-INNER JOIN prato p ON a.id_prato = p.id_prato
+INNER JOIN comentario c ON u.id = c.id_usuario
+INNER JOIN avaliacao a ON c.id_avaliacao = a.id
+INNER JOIN prato p ON a.id_prato = p.id
 WHERE 
-    p.categoria = 'sobremesa';
+    p.categoria = 'Vegano';
 
 
 -- Consulta 3
-CREATE VIEW PratosAvaliadosUsuarioData AS
+CREATE VIEW pratos_avaliados_usuario_data AS
 SELECT DISTINCT 
-    p.nome_prato
+    p.nome
 FROM 
     avaliacao a
-INNER JOIN usuario u ON a.id_usuario = u.id_usuario
-INNER JOIN prato p ON a.id_prato = p.id_prato
+INNER JOIN usuario u ON a.id_usuario = u.id
+INNER JOIN prato p ON a.id_prato = p.id
 WHERE 
-    a.data_avaliacao = '2023-10-01'
-    AND u.username = 'usuario1';
+    a.data_avaliacao = '2025-04-10'
+    AND u.username = 'gabigol';
 
 
 -- Consulta 4
-CREATE VIEW RestaurantesSemAvaliacaoRecente AS
-SELECT num_restaurante
-FROM restaurante
-
-EXCEPT
-
-SELECT 
-    r.num_restaurante
-FROM 
-    restaurante r
-INNER JOIN cardapio_restaurante cr ON r.id_restaurante = cr.id_restaurante
-INNER JOIN cardapio_prato cp ON cr.id_cardapio = cp.id_cardapio
-INNER JOIN avaliacao a ON cp.id_prato = a.id_prato;
+CREATE VIEW restaurantes_com_avaliacao_recente AS
+SELECT r.id, r.num_restaurante
+FROM restaurante r
+WHERE r.id IN (
+    SELECT DISTINCT cr.id_restaurante
+    FROM avaliacao a
+    INNER JOIN prato p ON a.id_prato = p.id
+    INNER JOIN cardapio_prato cp ON p.id = cp.id_prato
+    INNER JOIN cardapio_restaurante cr ON cp.id_cardapio = cr.id_cardapio
+    WHERE a.data_avaliacao >= CURRENT_DATE - INTERVAL '30 days'
+);
 
 
 -- Consulta 5
-CREATE VIEW IngredientesCafeDaManha AS
-SELECT DISTINCT 
-    I.nome
-FROM 
-    Ingrediente I
-JOIN Ingrediente_Prato IP ON I.id = IP.idIngrediente
-JOIN Prato P ON IP.idPrato = P.id
-JOIN Avaliacao A ON P.id = A.idPrato
-WHERE
-    A.refeicao = 'café da manhã';
+CREATE VIEW ingredientes_cafe_da_manha AS
+SELECT DISTINCT i.nome
+FROM avaliacao a
+JOIN prato p ON a.id_prato = p.id
+JOIN ingrediente_prato ip ON p.id = ip.id_prato
+JOIN ingrediente i ON ip.id_ingrediente = i.id
+WHERE (a.refeicao = 'Café da Manhã') AND (a.nota >= 4);
+
+
+-- Visualizar Consultas
+SELECT * FROM restaurantes_com_gluten;
+
+SELECT * FROM usuarios_comentaram_vegano;
+
+SELECT * FROM pratos_avaliados_usuario_data;
+
+SELECT * FROM restaurantes_com_avaliacao_recente;
+
+SELECT * FROM ingredientes_cafe_da_manha;
+
