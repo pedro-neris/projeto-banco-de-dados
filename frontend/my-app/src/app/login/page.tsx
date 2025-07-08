@@ -71,6 +71,7 @@ export default function LoginPage() {
                             name="email"
                             value={emailLogin}
                             onChange={(event) => setEmailLogin(event.target.value)}
+                            maxLength={100}
                             className= "pl-2 pb-1 w-full"
                             required
                         />
@@ -83,7 +84,7 @@ export default function LoginPage() {
                             name="senha"
                             value={senhaLogin}
                             onChange={(event) => setSenhaLogin(event.target.value)}
-                            placeholder="********"
+                            maxLength={100}
                             className="pl-2 pb-1 w-full"
                             required
                         />

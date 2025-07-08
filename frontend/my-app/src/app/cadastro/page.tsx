@@ -78,6 +78,7 @@ export default function Cadastro() {
                             name="nome"
                             value={nomeCadastro}
                             onChange={(event)=> setNomeCadastro(event.target.value)}
+                            maxLength={100}
                             className="pl-2 pb-1 w-full"
                             required
                         />
@@ -88,6 +89,7 @@ export default function Cadastro() {
                             type="email"
                             name="email"
                             value={emailCadastro}
+                            maxLength={100}
                             onChange={(event) => setEmailCadastro(event.target.value)}
                             className= "pl-2 pb-1 w-full"
                             required
@@ -101,7 +103,7 @@ export default function Cadastro() {
                             name="senha"
                             value={senhaCadastro}
                             onChange={(event) => setSenhaCadastro(event.target.value)}
-                            placeholder="********"
+                            maxLength={100}
                             className="pl-2 pb-1 w-full"
                             required
                         />
@@ -113,6 +115,7 @@ export default function Cadastro() {
                             name="username"
                             value={usernameCadastro}
                             onChange={(event) => setUsernameCadastro(event.target.value)}
+                            maxLength={70}
                             className="pl-2 pb-1 w-full"
                             required
                         />

@@ -18,7 +18,6 @@ export class AuthService {
         else {
             const payload = {
                 sub: user.id,
-                email: user.email,
             };
             const jwtSecret = process.env.JWT_SECRET;
             const jwtToken = this.jwtService.sign(payload, {

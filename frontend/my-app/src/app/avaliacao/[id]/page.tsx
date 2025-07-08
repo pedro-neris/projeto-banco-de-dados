@@ -489,7 +489,7 @@ export default function singleAvalPage() {
                         <p className="text-center"> Comentários </p>
                     </div>
                     {comentarios.length === 0 ? (
-                        <p className="text-center"> Nenhum comentário </p>
+                        <p className="text-center pb-4"> Nenhum comentário </p>
                     ) : (
                         <div className="space-y-4 bg-blue-300">
                             {comentarios.map((comentario) => (

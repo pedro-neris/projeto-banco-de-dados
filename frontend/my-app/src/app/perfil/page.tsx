@@ -133,6 +133,7 @@ export default function Perfil() {
                                 name="nome"
                                 value={nomeEdit}
                                 onChange={(e) => setNomeEdit(e.target.value)}
+                                maxLength={100}
                                 className="pl-2 pb-1 w-full"
                                 required
                             />
@@ -144,6 +145,7 @@ export default function Perfil() {
                                 name="email"
                                 value={emailEdit}
                                 onChange={(e) => setEmailEdit(e.target.value)}
+                                maxLength={100}
                                 className="pl-2 pb-1 w-full"
                                 required
                             />
@@ -156,7 +158,7 @@ export default function Perfil() {
                                 name="senha"
                                 value={senhaEdit}
                                 onChange={(e) => setSenhaEdit(e.target.value)}
-                                placeholder="********"
+                                maxLength={100}
                                 className="pl-2 pb-1 w-full"
                                 required
                             />
@@ -168,6 +170,7 @@ export default function Perfil() {
                                 name="username"
                                 value={usernameEdit}
                                 onChange={(e) => setUsernameEdit(e.target.value)}
+                                maxLength={70}
                                 className="pl-2 pb-1 w-full"
                                 required
                             />
