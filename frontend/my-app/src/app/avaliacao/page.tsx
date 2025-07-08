@@ -32,24 +32,21 @@ export default function AvaliacaoPage() {
         }
     }
 
-    const handleDeleteAvaliacao = (id: number) => {
+    const handleDeleteAvaliacao = async (id: number) => {
         const confirmDelete = window.confirm("Tem certeza que deseja excluir esta avaliação? Esta ação não pode ser desfeita.");
         if (confirmDelete) {
-            deleteAvaliacao(id);
+            try {
+                await axios.delete(`http://localhost:3000/avaliacao/${id}`);
+                toast.success("Avaliação excluída com sucesso!", { autoClose: 2000 });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } catch (error: any) {
+                toast.error("Erro ao excluir avaliação.");
+            }
         }
     }
 
-    const deleteAvaliacao = async (id: number) => {
-        try {
-            await axios.delete(`http://localhost:3000/avaliacao/${id}`);
-            toast.success("Avaliação excluída com sucesso!", { autoClose: 2000 });
-            setTimeout(() => {
-                window.location.reload();
-            }, 3000);
-        } catch (error: any) {
-            toast.error("Erro ao excluir avaliação.");
-        }
-    };
     const toggleModalAvaliacao = () => {
         setIsModalEditAvaliacaoOpen(!isModalEditAvaliacaoOpen);
     }
@@ -105,23 +102,31 @@ export default function AvaliacaoPage() {
             <div className="h-auto text-black w-[60%] max-w-lg flex flex-col mx-auto bg-[#4a71ff] rounded-md items-center p-6">
                 <h2 className="text-white text-xl font-bold mb-4">Editar Avaliação</h2>
 
-                <div className="w-full mb-4">
+                <div className="w-full mb-2">
+                    <label className="text-white">Prato: </label>
+                    <select
+                        disabled
+                        value={pratosAvaliacoes.get(avaliacaoEdit?.id ?? 0)?.nome || ''}
+                        className="bg-gray-200 h-[2rem] w-full pl-[0.325rem] mt-1 mb-2 rounded-md cursor-not-allowed opacity-75"
+                    >
+                        <option>{pratosAvaliacoes.get(avaliacaoEdit?.id ?? 0)?.nome || ''}</option>
+                    </select>
+                    <label className="text-white mt-6">Refeição: </label>
                     <select
                         disabled
                         value={avaliacaoEdit?.refeicao}
-                        className="bg-gray-200 h-[2rem] w-full pl-[0.325rem] mt-5 rounded-md cursor-not-allowed opacity-75"
+                        className="bg-gray-200 h-[2rem] w-full pl-[0.325rem] mt-1 mb-2 rounded-md cursor-not-allowed opacity-75"
                     >
                         <option>{avaliacaoEdit?.refeicao}</option>
                     </select>
 
 
-                    <label className="text-white block mb-2">Nota:</label>
+                    <label className="text-white">Nota:</label>
                     <select
                         value={editAvaliacaoNota}
                         onChange={(event) => setEditAvaliacaoNota(Number(event.target.value))}
-                        className="w-full p-2 rounded-md border"
+                        className="w-full mt-1 mb-2 p-2 rounded-md border"
                     >
-                        <option disabled value="-1">Selecione a nota</option>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -132,7 +137,7 @@ export default function AvaliacaoPage() {
                 </div>
 
                 <div className="w-full mb-4">
-                    <label className="text-white block mb-2">Data de Consumo:</label>
+                    <label className="text-white mb-2">Data de Consumo:</label>
                     <input
                         type="date"
                         value={editAvaliacaoDataConsumo?.toISOString?.()?.split('T')[0]}
@@ -167,7 +172,7 @@ export default function AvaliacaoPage() {
                                     toast.error("Data de consumo inválida!");
                                 }
                                 else {
-                                    const editedAvaliacao: Partial<Avaliacao> = {
+                                    const editedAvaliacao = {
                                         texto: editAvaliacaoTexto,
                                         nota: editAvaliacaoNota,
                                         id_usuario: userInfo?.id,
@@ -177,7 +182,6 @@ export default function AvaliacaoPage() {
                                     };
                                     editingAvaliacao(editedAvaliacao, avaliacaoEdit?.id ?? 0);
                                     toggleModalAvaliacao();
-                                    fetchAvaliacoesUser(userInfo?.id ?? 0);
                                 }
                             }}
                         >

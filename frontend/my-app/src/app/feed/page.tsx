@@ -32,8 +32,8 @@ export default function FeedPage() {
     useEffect(() => {
         const fetchInfoPrato = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/prato/info");
-                setInfoPrato(response.data);
+                const response_prato = await axios.get("http://localhost:3000/prato/info");
+                setInfoPrato(response_prato.data);
             } catch (error) {
                 toast.error("Erro ao buscar informações dos pratos");
             }
@@ -70,7 +70,8 @@ export default function FeedPage() {
             resetAvaliacaoModalFields();
             setTimeout(() => {
                 toggleModalAvaliacao();
-            }, 500);
+                window.location.reload();
+            }, 700);
         } catch {
             toast.error("Erro ao criar avaliação. Por favor, tente novamente.");
         }
@@ -89,8 +90,7 @@ export default function FeedPage() {
                     value={pratoAvaliacao?.nome || "-1"}
                     className="bg-white h-[2rem] w-[90%] pl-[0.325rem] mt-5 rounded-md"
                     onChange={(event) => {
-                        const selectedNome = event.target.value;
-                        const selectedPrato = pratos.find((prato) => prato.nome === selectedNome) || null;
+                        const selectedPrato = pratos.find((prato) => prato.nome === event.target.value) || null;
                         setPratoAvaliacao(selectedPrato);
                     }}
                 >
@@ -125,14 +125,17 @@ export default function FeedPage() {
                     <option value="Almoço">Almoço</option>
                     <option value="Jantar">Jantar</option>
                 </select>
+                <div className="flex flex-col w-[90%] mt-5 items-start" >                
+                    <label className="text-white mb-2">Data de Consumo:</label>
                 <input
                     type="date"
                     value={dataConsumoAvaliacao?.toISOString().split('T')[0] || ''}
                     max={new Date().toISOString().split('T')[0]}
                     onChange={(e) => setdataConsumoAvaliacao(new Date(e.target.value))}
-                    className="bg-white h-[2rem] w-[90%] pl-[0.325rem] mt-5 rounded-md"
+                    className="bg-white h-[2rem] w-[90%] pl-[0.325rem] mt-1 rounded-md"
                 />
 
+</div>
                 <div className="flex flex-col h-[12rem] w-[90%] bg-[#A4FED3] mt-[2rem] rounded-md">
                     <textarea
                         value={textoAvaliacao}
@@ -178,7 +181,7 @@ export default function FeedPage() {
                                 }
                             }}
                         >
-                            Enviar
+                            Enviar Avaliação
                         </button>
                     </div>
                 </div>
@@ -400,6 +403,47 @@ export default function FeedPage() {
                         Nova avaliação
                     </button>
                 </div>
+                <div className='grid grid-cols-4 gap-2 p-4'>
+                    {infoPrato.map((prato) => (
+                        <div key={prato.id} className="w-[300px] h-[110px] border-2 border-blue-500 flex bg-white">
+                            <div className="flex flex-col justify-between flex-[3] text-sm p-2">
+                                <div className="font-bold text-gray-800">
+                                    {prato.nome}
+                                </div>
+                                <div className="text-gray-600">
+                                    Avaliações: {prato.qtd_avaliacoes}
+                                </div>
+                                <div className="text-gray-600">
+                                    Nota Média: {prato.media_avaliacoes ? Number(prato.media_avaliacoes).toFixed(2) : 'N/A'}
+                                </div>
+                                                            <button 
+                            className="bg-blue-500 hover:bg-blue-700 w-[60%] text-white font-bold rounded cursor-pointer mt-2 mb-2 ml-2"
+                            onClick={() => router.push('/login')}>
+                                Avaliar
+                            </button>
+
+                            </div>
+                            <div className="flex-[2] bg-white flex items-center justify-center">
+                                {prato.icone ? (
+                                    <img 
+                                        src={`data:;base64,${prato.icone}`}
+                                        alt={`${prato.nome}`}
+                                        className="w-full h-full"
+                                    />
+                                ) : (
+                                    <div className="text-black text-sm text-center p-1">
+                                        Sem imagem
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                    {infoPrato.length === 0 && (
+                        <p className="text-center text-gray-600 text-xl mt-20">Nenhum prato cadastrado</p>
+
+                    )}
+                </div>
+
             </div>
         )
     }
@@ -420,10 +464,11 @@ export default function FeedPage() {
                         className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4 cursor-pointer'>
                         Nova avaliação
                     </button>
-                </div>                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4'>
-                    {infoPrato.map((prato, index) => (
-                        <div key={index} className="w-[300px] h-[90px] border-2 border-blue-500 flex bg-white hover:scale-105 transition-all cursor-pointer" onClick={() => router.push(`/prato/info/${prato.id}`)}>
-                            <div className="flex flex-col justify-between flex-[5] text-sm p-2">
+                </div>               
+                <div className='grid grid-cols-4 gap-2 p-4'>
+                    {infoPrato.map((prato) => (
+                        <div key={prato.id} className="w-[300px] h-[110px] border-2 border-blue-500 flex bg-white">
+                            <div className="flex flex-col justify-between flex-[3] text-sm p-2">
                                 <div className="font-bold text-gray-800">
                                     {prato.nome}
                                 </div>
@@ -433,16 +478,26 @@ export default function FeedPage() {
                                 <div className="text-gray-600">
                                     Nota Média: {prato.media_avaliacoes ? Number(prato.media_avaliacoes).toFixed(2) : 'N/A'}
                                 </div>
+                                                            <button 
+                            className="bg-blue-500 hover:bg-blue-700 w-[60%] text-white font-bold rounded cursor-pointer mt-2 mb-2 ml-2"
+                            onClick={() => {
+                                const selectedPrato = pratos.find((pratoLoop) => pratoLoop.nome === prato.nome) || null;
+                                setPratoAvaliacao(selectedPrato);
+                                toggleModalAvaliacao();
+                            }}>
+                                Avaliar
+                            </button>
+
                             </div>
                             <div className="flex-[2] bg-white flex items-center justify-center">
                                 {prato.icone ? (
                                     <img 
-                                        src={`data:imagem/png;base64,${prato.icone}`}
+                                        src={`data:;base64,${prato.icone}`}
                                         alt={`${prato.nome}`}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full"
                                     />
                                 ) : (
-                                    <div className="text-white text-xs text-center p-1">
+                                    <div className="text-black text-sm text-center p-1">
                                         Sem imagem
                                     </div>
                                 )}
@@ -450,13 +505,11 @@ export default function FeedPage() {
                         </div>
                     ))}
                     {infoPrato.length === 0 && (
-                                          <div className="text-center text-gray-600 text-xl mt-20">
-                        <p>Nenhum prato cadastrado.</p>
-                    </div>
+                        <p className="text-center text-gray-600 text-xl mt-20">Nenhum prato cadastrado</p>
 
                     )}
                 </div>
-            </div>
+              </div>
         );
     }
 }

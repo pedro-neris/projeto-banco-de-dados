@@ -28,7 +28,7 @@ export default function header_logado() {
                         Feed
                     </h2>
                     </div>
-                    <div className='flex items-center space-x-4 mr-5'>
+                    <div className='flex items-center space-x-4 mr-2'>
                     <button>
                         <Link
                             href="/avaliacao"

@@ -10,13 +10,13 @@ export class PratoService {
 
   async findOnePrato(id: number): Promise<Prato | null> {
     const result = await this.db.query(
-      'SELECT * FROM Prato WHERE id = $1',
+      'SELECT * FROM prato WHERE id = $1',
       [id],
     );
     return result.rows[0] as Prato ?? null;
   }
   async findAllPratos(): Promise<Prato[]> {
-    const result = await this.db.query('SELECT * FROM Prato');
+    const result = await this.db.query('SELECT * FROM prato');
     return result.rows.map(prato => ({
       ...prato,
       icone: prato.icone ? prato.icone.toString('base64') : null,

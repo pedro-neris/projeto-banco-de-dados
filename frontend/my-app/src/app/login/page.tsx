@@ -6,7 +6,8 @@ import { toast } from 'react-toastify';
 import Link from 'next/link';
 
 export default function LoginPage() {
-    const [formLogin, setFormLogin] = useState({ email: '', senha: '' });
+    const [emailLogin, setEmailLogin] = useState('');
+    const [senhaLogin, setSenhaLogin] = useState('');
     const router = useRouter();
 
     useEffect(() => {
@@ -16,15 +17,11 @@ export default function LoginPage() {
         }
     }, [router]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormLogin({ ...formLogin, [e.target.name]: e.target.value });}; 
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleLogin = async () => {
         try {
             const response = await axios.post(`http://localhost:3000/auth/login`, {
-                email: formLogin.email,
-                senha: formLogin.senha
+                email: emailLogin,
+                senha: senhaLogin
             });
 
             const { token } = response.data;
@@ -59,20 +56,22 @@ export default function LoginPage() {
             />
             <div className="w-1/2 bg-gray-100 flex items-center justify-center">
                 <div className="w-3/4 p-10 rounded-lg shadow-lg">
-                    <h1 className='text-4xl font-bold mb-6 text-center'>
+                    <h1 className="text-4xl font-bold mb-6 text-center cursor-pointer"
+                        onClick={() => router.push('/feed')}>
                         AvaliaRU
                     </h1>
                     <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
-                    <form onSubmit={handleSubmit}>
+                    <form>
                         <div className="mb-4">
                     <label className=" mb-2 text-sm font-medium text-gray-700">Email</label>
                     <div className="mb-4 border outline-2 outline-gray-100 rounded-lg">
                         <input
                             type="email"
                             name="email"
-                            value={formLogin.email}
-                            onChange={handleChange}
+                            value={emailLogin}
+                            onChange={(event) => setEmailLogin(event.target.value)}
+                            maxLength={100}
                             className= "pl-2 pb-1 w-full"
                             required
                         />
@@ -83,9 +82,9 @@ export default function LoginPage() {
                         <input
                             type="password"
                             name="senha"
-                            value={formLogin.senha}
-                            onChange={handleChange}
-                            placeholder="********"
+                            value={senhaLogin}
+                            onChange={(event) => setSenhaLogin(event.target.value)}
+                            maxLength={100}
                             className="pl-2 pb-1 w-full"
                             required
                         />
@@ -94,7 +93,8 @@ export default function LoginPage() {
                         </div>
                         <div className='flex pt-2 flex-col justify-center items-center'>
                         <button
-                            type="submit"
+                            type="button"
+                            onClick={handleLogin}
                             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
                         >
                             Entrar

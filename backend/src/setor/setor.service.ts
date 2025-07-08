@@ -8,13 +8,13 @@ export class SetorService {
   campusService: CampusService = new CampusService(this.db);
   async findOneSetor(id: number): Promise<Setor | null> {
     const result = await this.db.query(
-      'SELECT * FROM Setor WHERE id = $1',
+      'SELECT * FROM setor WHERE id = $1',
       [id],
     );
     return result.rows[0] as Setor ?? null;
   }
   async findAllSetores(): Promise<Setor[]> {
-    const result = await this.db.query('SELECT * FROM Setor');
+    const result = await this.db.query('SELECT * FROM setor');
     return result.rows as Setor[];
   }
   async findSetoresByCampus(idCampus: number): Promise<Setor[]> {
@@ -23,7 +23,7 @@ export class SetorService {
       throw new NotFoundException('Campus não encontrado');
     }
     const result = await this.db.query(
-      'SELECT * FROM Setor WHERE id_campus = $1',
+      'SELECT * FROM setor WHERE id_campus = $1',
       [idCampus],
     );
     return result.rows as Setor[];

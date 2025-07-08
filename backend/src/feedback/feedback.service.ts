@@ -18,7 +18,7 @@ export class FeedbackService {
 
   async findOne(id: number): Promise<Feedback | null> {
     const result = await this.db.query(
-      'SELECT * FROM Feedback WHERE id = $1',
+      'SELECT * FROM feedback WHERE id = $1',
       [id],
     );
     return result.rows[0] as Feedback ?? null;
@@ -28,7 +28,7 @@ export class FeedbackService {
     return result.rows as Feedback[];
   } async findAllFeedbacksFromUser(id: number): Promise<Feedback[]> {
     const result = await this.db.query(
-      'SELECT * FROM Feedback WHERE id_usuario = $1',
+      'SELECT * FROM feedback WHERE id_usuario = $1',
       [id],
     );
     return result.rows as Feedback[];

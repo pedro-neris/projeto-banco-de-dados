@@ -11,25 +11,18 @@ import HeaderLogado from "@/components/headers/logado";
 export default function Perfil() {
     const router = useRouter();
     const [userInfo, setUserInfo] = useState<User | null>(null);
-    const [formEdit, setformEdit] = useState({
-        email: '',
-        username: '',
-        nome: '',
-        senha: '',
-    });
+    const [emailEdit, setEmailEdit] = useState('');
+    const [usernameEdit, setUsernameEdit] = useState('');
+    const [nomeEdit, setNomeEdit] = useState('');
+    const [senhaEdit, setSenhaEdit] = useState('');
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setformEdit({ ...formEdit, [e.target.name]: e.target.value });
-    };
-
-    const handleCancel = () => {
-        setformEdit({
-            email: userInfo?.email || '',
-            username: userInfo?.username || '',
-            nome: userInfo?.nome || '',
-            senha: userInfo?.senha || '',
-        });
+    const handleCancel= () => {
+        setEmailEdit('');
+        setUsernameEdit('');
+        setNomeEdit('');
+        setSenhaEdit('');
     }
+
 
     const ConfirmDelete = () => {
         const confirmDelete = window.confirm("Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.");
@@ -39,7 +32,7 @@ export default function Perfil() {
     }
     const handleDelete = async () => {
         try {
-            const response = await axios.delete(`http://localhost:3000/user/${userInfo?.id}`);
+            await axios.delete(`http://localhost:3000/user/${userInfo?.id}`);
             toast.success("Conta excluída com sucesso!", { autoClose: 2000 });
             localStorage.removeItem('token');
             router.push('/feed');
@@ -47,19 +40,18 @@ export default function Perfil() {
             toast.error("Erro ao excluir conta.");
         }
     }
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const confirm = window.confirm("Tem certeza que deseja editar suas informações?");
+    const handleEdit = async () => {
+        const confirm = window.confirm("Tem certeza que deseja atualizar suas informações?");
         if (confirm) {
-        
         try {
             const updateUser = {
-                email: formEdit.email,
-                username: formEdit.username,
-                nome: formEdit.nome,
-                senha: formEdit.senha,
+                email: emailEdit,
+                username: usernameEdit,
+                nome: nomeEdit,
+                senha: senhaEdit,
             }
-            const response = await axios.patch(`http://localhost:3000/user/${userInfo?.id}`,
+                
+                await axios.patch(`http://localhost:3000/user/${userInfo?.id}`,
                 updateUser
             );
             toast.success("Informações atualizadas com sucesso!", { autoClose: 2000 });
@@ -78,11 +70,11 @@ export default function Perfil() {
             if (error.response && error.response.status === 409) {
                 if (error.response.data.message === 'Email já cadastrado') {
                     toast.error("Este email já está cadastrado!", {
-                        autoClose: 3000,
+                        autoClose: 2000,
                     });
                 } else if (error.response.data.message === 'Nome de usuário em uso') {
                     toast.error("Este nome de usuário já está em uso!", {
-                        autoClose: 3000,
+                        autoClose: 2000,
                     });
                 }
             } else {
@@ -117,12 +109,10 @@ export default function Perfil() {
 
     useEffect(() => {
         if (userInfo) {
-            setformEdit({
-                email: userInfo.email,
-                username: userInfo.username,
-                nome: userInfo.nome,
-                senha: userInfo.senha,
-            });
+            setEmailEdit(userInfo.email);
+            setUsernameEdit(userInfo.username);
+            setNomeEdit(userInfo.nome);
+            setSenhaEdit(userInfo.senha);
         }
     }, [userInfo]);
 
@@ -135,14 +125,15 @@ export default function Perfil() {
             <div className="flex flex-col items-center justify-center pt-4">
                 <h1 className="text-2xl font-bold mb-4">Informações do perfil</h1>
                 <div className="w-2/4 h-1/2 flex flex-row items-center justify-center bg-white rounded-lg shadow-lg p-10">
-                    <form onSubmit={handleSubmit} >
+                    <form >
                         <label className=" mb-2 text-sm font-medium text-gray-700">Nome</label>
                         <div className="mb-4 border outline-2 outline-gray-100 rounded-lg">
                             <input
                                 type="text"
                                 name="nome"
-                                value={formEdit.nome}
-                                onChange={handleChange}
+                                value={nomeEdit}
+                                onChange={(e) => setNomeEdit(e.target.value)}
+                                maxLength={100}
                                 className="pl-2 pb-1 w-full"
                                 required
                             />
@@ -152,8 +143,9 @@ export default function Perfil() {
                             <input
                                 type="email"
                                 name="email"
-                                value={formEdit.email}
-                                onChange={handleChange}
+                                value={emailEdit}
+                                onChange={(e) => setEmailEdit(e.target.value)}
+                                maxLength={100}
                                 className="pl-2 pb-1 w-full"
                                 required
                             />
@@ -164,9 +156,9 @@ export default function Perfil() {
                             <input
                                 type="password"
                                 name="senha"
-                                value={formEdit.senha}
-                                onChange={handleChange}
-                                placeholder="********"
+                                value={senhaEdit}
+                                onChange={(e) => setSenhaEdit(e.target.value)}
+                                maxLength={100}
                                 className="pl-2 pb-1 w-full"
                                 required
                             />
@@ -176,8 +168,9 @@ export default function Perfil() {
                             <input
                                 type="text"
                                 name="username"
-                                value={formEdit.username}
-                                onChange={handleChange}
+                                value={usernameEdit}
+                                onChange={(e) => setUsernameEdit(e.target.value)}
+                                maxLength={70}
                                 className="pl-2 pb-1 w-full"
                                 required
                             />
@@ -185,7 +178,8 @@ export default function Perfil() {
 
                         <div className="flex flex-row space-x-2">
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={handleEdit}
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 cursor-pointer rounded"
                             >
                                 Editar

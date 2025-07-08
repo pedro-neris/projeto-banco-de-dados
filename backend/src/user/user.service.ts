@@ -14,7 +14,7 @@ export class UserService {
 
   async findUserByEmail(email: string): Promise<User | null> {
     const result = await this.db.query(
-      'SELECT * FROM Usuario WHERE email = $1',
+      'SELECT * FROM usuario WHERE email = $1',
       [email],
     );
     return result.rows[0] as User ?? null;
@@ -22,7 +22,7 @@ export class UserService {
 
   async findUserById(id: number): Promise<User | null> {
     const result = await this.db.query(
-      'SELECT * FROM Usuario WHERE id = $1',
+      'SELECT * FROM usuario WHERE id = $1',
       [id],
     );
     return result.rows[0] as User ?? null;
@@ -30,7 +30,7 @@ export class UserService {
 
   async findUserByUsername(username: string): Promise<User | null> {
     const result = await this.db.query(
-      'SELECT * FROM Usuario WHERE username = $1',
+      'SELECT * FROM usuario WHERE username = $1',
       [username],
     );
     return result.rows[0] as User ?? null;
@@ -48,7 +48,7 @@ export class UserService {
     }
 
     const result = await this.db.query(
-      `INSERT INTO Usuario (email, username, nome, senha)
+      `INSERT INTO usuario (email, username, nome, senha)
        VALUES ($1, $2, $3, $4)`,
       [novoUsuario.email, novoUsuario.username, novoUsuario.nome,
       novoUsuario.senha],
@@ -58,7 +58,7 @@ export class UserService {
   }
 
   async findAllUsers(): Promise<User[]> {
-    const result = await this.db.query('SELECT * FROM Usuario');
+    const result = await this.db.query('SELECT * FROM usuario');
     return result.rows as User[];
   }
 
@@ -80,7 +80,7 @@ export class UserService {
     }
     try {
       const result = await this.db.query(
-        `UPDATE Usuario 
+        `UPDATE usuario 
         SET nome=$1, email=$2,
         username=$3, senha=$4
         WHERE id = $5 `, [
@@ -104,7 +104,7 @@ export class UserService {
       throw new NotFoundException(`Usuário com id ${id} não encontrado`);
     }
     const result = await this.db.query(
-      'DELETE FROM Usuario WHERE id = $1',
+      'DELETE FROM usuario WHERE id = $1',
       [id],
     );
     return {
