@@ -1,5 +1,3 @@
-TRUNCATE TABLE Comentario, Feedback, Avaliacao, Cardapio_Prato, Cardapio_Restaurante, Ingrediente_Prato, Cardapio, Prato, Ingrediente, Setor, Restaurante, Campus, Usuario RESTART IDENTITY CASCADE;
-
 INSERT INTO Usuario (email, username, nome, senha) VALUES
 ('pedro@gmail.com', 'pedro.2532', 'Pedro', '412'),
 ('lucas.g@unb.br', 'lucas_flu', 'Lucas', '421125'),
@@ -101,10 +99,10 @@ INSERT INTO Ingrediente_Prato (id_ingrediente, id_prato) VALUES
 
 INSERT INTO Cardapio (data, especial) VALUES
 ('2025-01-16', 'Culinária brasileira'),
-('2025-02-13', ''),
-('2025-02-14', ''),
-('2025-02-25', ''), 
-('2025-02-27', '');
+('2025-02-13', null),
+('2025-02-14', null),
+('2025-02-25', null), 
+('2025-02-27', null);
 
 INSERT INTO Cardapio_Restaurante (id_restaurante, id_cardapio) VALUES
 (1, 1),
@@ -137,7 +135,7 @@ INSERT INTO Cardapio_Prato (id_cardapio, id_prato, refeicao) VALUES
 (5, 3, 'Janta');
 
 INSERT INTO Feedback (data, texto, tipo, id_setor, id_usuario) VALUES
-('2025-01-02', 'Atendimento muito rápido' ,'Elogio', 1, 1),
+('2024-11-02', 'Atendimento muito rápido' ,'Elogio', 1, 1),
 ('2025-02-10', 'comida estava fria', 'Reclamação', 2, 2),
 ('2025-03-15', 'achei muito limpo', 'Elogio', 3, 2),
 ('2025-04-05', 'Falta variedade no cardápio', 'Sugestão', 1, 4),
@@ -148,11 +146,11 @@ INSERT INTO Avaliacao (data_avaliacao, refeicao, data_consumo, nota, texto, id_u
 ('2025-02-12', 'Janta', '2025-02-12', 3, 'Macarrão um pouco sem sal', 2, 6),
 ('2025-03-20', 'Almoço', '2025-03-20', 2, 'frango tava muito seco', 3, 2),
 ('2025-04-10', 'Café da Manhã', '2025-04-10', 5, 'gostei muito', 4, 5),
-('2025-05-02', 'Almoço', '2025-05-02', 4, 'strogonoff sempre é muito bom', 5, 8);
+('2025-04-02', 'Almoço', '2025-05-02', 4, 'strogonoff sempre é muito bom', 5, 8);
 
 INSERT INTO Comentario (texto, data, id_avaliacao, id_usuario) VALUES
 ('concordo plenamente!', '2025-01-05', 1, 2),
 ('eu achei o macarrão ótimo', '2025-02-12', 2, 3),
-('podiam fazer mais vezes', '2025-05-02', 5, 4),
+('podiam fazer mais vezes', '2025-04-03', 5, 4),
 ('discordo, o frango estava perfeito', '2025-05-02', 3, 1),
 ('Sério??', '2025-05-02', 2, 5);
