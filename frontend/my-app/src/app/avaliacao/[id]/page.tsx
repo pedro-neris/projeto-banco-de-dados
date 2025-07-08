@@ -6,9 +6,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import HeaderLogado from "@/components/headers/logado";
+import HeaderDeslogado from "@/components/headers/deslogado";
 import { Avaliacao, Comentario, User, Prato } from "@/types";
 
-export default function AvaliacaoDetailPage() {
+export default function singleAvalPage() {
     const params = useParams();
     const router = useRouter();
     const [comentarios, setComentarios] = useState<Comentario[]>([]);
@@ -22,7 +23,15 @@ export default function AvaliacaoDetailPage() {
     const [userComentarios, setUserComentarios] = useState<Map<number, User>>(new Map());
     const [pratoAval, setPratoAval] = useState<Prato | null>(null);
     const [idComentarioEdit, setIdComentarioEdit] = useState<number | null>(null);
+    const [editAvaliacaoTexto, setEditAvaliacaoTexto] = useState<string>('');
+    const [editAvaliacaoNota, setEditAvaliacaoNota] = useState<number>(-1);
+    const [editAvaliacaoDataConsumo, setEditAvaliacaoDataConsumo] = useState<Date | null>(null);
+    const [isModalEditAvaliacaoOpen, setIsModalEditAvaliacaoOpen] = useState(false);
     const avaliacaoId = params.id as string;
+
+    const toggleModalAvaliacao = ()=> {
+        setIsModalEditAvaliacaoOpen(!isModalEditAvaliacaoOpen);
+    }
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -79,6 +88,10 @@ export default function AvaliacaoDetailPage() {
         setTextoEditComentario('');
         setIdComentarioEdit(null);
     }
+
+    const resetNovoComentaroiFields = ()=> {
+        setTextoNovoComentario('');
+    }
     const toggleModalEditComentario = () => {
         setIsModalEditComentarioOpen(!isModalEditComentarioOpen)
     }
@@ -98,9 +111,11 @@ export default function AvaliacaoDetailPage() {
                     };
 
                     await axios.post('http://localhost:3000/comentario', createComment);
-                    toast.success("Comentário feito com sucesso!");
+                    toast.success("Comentário feito com sucesso!", {autoClose: 800});
                     toggleModalNovoComentario();
-                    window.location.reload();
+                    setTimeout (() => {
+                        window.location.reload();
+                    }, 800);
                 }
             } catch (error: any) {
                 toast.error("Erro ao fazer comentário.");
@@ -162,12 +177,14 @@ export default function AvaliacaoDetailPage() {
 
     const modalCreateComentario = () => (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-            <div className="h-auto text-black w-[60%] flex flex-col mx-auto bg-[#4a71ff] rounded-md items-center">
+            <div className="h-auto text-black w-[60%] max-w-lg flex flex-col mx-auto bg-[#4a71ff] rounded-md items-center p-6">
+                <h2 className="text-white text-xl font-bold mb-4">Novo Comentário</h2>
                 <div className="flex flex-col h-[12rem] w-full bg-[#A4FED3] rounded-md">
                     <textarea
+                        value={textoNovoComentario}
                         maxLength={500}
                         onChange={(event) => setTextoNovoComentario(event.target.value)}
-                        placeholder="Digite seu comentário..."
+                        placeholder="Digite seu comentário"
                         className="text-black h-full shadow-sm placeholder-black placeholder-opacity-50 mt-2 pt-[2px] border-none pl-[1rem] bg-[#A4FED3] leading-tight focus:outline-none w-full p-2 resize-none overflow-y-auto border rounded-md"
                     />
                 </div>
@@ -179,13 +196,21 @@ export default function AvaliacaoDetailPage() {
                     <div className="flex justify-end items-center space-x-4">
                         <button
                             className="bg-[#A4FED3] text-[#2B895C] rounded-lg px-4 py-2 hover:scale-105 transition-all"
-                            onClick={handleCreateComentario}
+                            onClick={() => {
+                                if (!textoNovoComentario.trim() ) {
+                                    toast.error("Preencha o texto do comentário!");
+                                }
+                                else {
+                                    handleCreateComentario();
+                                    resetNovoComentaroiFields();
+                                }
+                            }}
                         >
-                            Comentar
+                            Enviar Comentário
                         </button>
 
                         <button
-                            onClick={toggleModalNovoComentario}
+                            onClick={() => toggleModalNovoComentario()}
                             className="bg-white text-[#4a71ff] border border-[#4a71ff] rounded-lg px-4 py-2 hover:bg-red-500 hover:text-white transition-all"
                         >
                             Cancelar
@@ -198,13 +223,16 @@ export default function AvaliacaoDetailPage() {
 
     const modalEditComentario = () => (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-            <div className="h-auto text-black w-[60%] flex flex-col mx-auto bg-[#4a71ff] rounded-md items-center">
+            <div className="h-auto text-black w-[60%] max-w-lg flex flex-col mx-auto bg-[#4a71ff] rounded-md items-center p-6">
+                <h2 className="text-white text-xl font-bold mb-4">Editar Comentário</h2>
+
+
                 <div className="flex flex-col h-[12rem] w-full bg-[#A4FED3] rounded-md">
                     <textarea
-                        value= {textoEditComentario}
+                        value={textoEditComentario}
                         maxLength={500}
                         onChange={(event) => setTextoEditComentario(event.target.value)}
-                        placeholder="Digite seu comentário..."
+                        placeholder="Digite seu comentário sobre a avaliação..."
                         className="text-black h-full shadow-sm placeholder-black placeholder-opacity-50 mt-2 pt-[2px] border-none pl-[1rem] bg-[#A4FED3] leading-tight focus:outline-none w-full p-2 resize-none overflow-y-auto border rounded-md"
                     />
                 </div>
@@ -216,13 +244,21 @@ export default function AvaliacaoDetailPage() {
                     <div className="flex justify-end items-center space-x-4">
                         <button
                             className="bg-[#A4FED3] text-[#2B895C] rounded-lg px-4 py-2 hover:scale-105 transition-all"
-                            onClick={handleEditComentario}
+                            onClick={() => {
+                                if (!textoEditComentario.trim() ) {
+                                    toast.error("Preencha o texto do comentário!");
+                                }
+                                else {
+                                    handleEditComentario();
+                                    resetEditComentarioFields
+                                }
+                            }}
                         >
                             Salvar
                         </button>
 
                         <button
-                            onClick={() => { toggleModalEditComentario(); resetEditComentarioFields(); }}
+                            onClick={() => toggleModalEditComentario()}
                             className="bg-white text-[#4a71ff] border border-[#4a71ff] rounded-lg px-4 py-2 hover:bg-red-500 hover:text-white transition-all"
                         >
                             Cancelar
@@ -233,16 +269,146 @@ export default function AvaliacaoDetailPage() {
         </div>
     );
 
-    if (!avaliacao || !userInfo) {
+        const editingAvaliacao = async (avaliacaoEdit: Partial<Avaliacao>, id: number) => {
+        try {
+            await axios.patch(`http://localhost:3000/avaliacao/${id}`, avaliacaoEdit);
+            toast.success("Avaliação editada com sucesso!", { autoClose: 2000 });
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } catch (error: any) {
+            toast.error("Erro ao editar avaliação.");
+        }
+    }
+
+    const modalEditAvaliacao = () => (
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+            <div className="h-auto text-black w-[60%] max-w-lg flex flex-col mx-auto bg-[#4a71ff] rounded-md items-center p-6">
+                <h2 className="text-white text-xl font-bold mb-4">Editar Avaliação</h2>
+
+                <div className="w-full mb-2">
+                    <label className="text-white">Prato: </label>
+                    <select
+                        disabled
+                        value={pratoAval ? pratoAval.nome : ''}
+                        className="bg-gray-200 h-[2rem] w-full pl-[0.325rem] mt-1 mb-2 rounded-md cursor-not-allowed opacity-75"
+                    >
+                        <option>{pratoAval ? pratoAval.nome : ''}</option>
+                    </select>
+                    <label className="text-white mt-6">Refeição: </label>
+                    <select
+                        disabled
+                        value={avaliacao?.refeicao}
+                        className="bg-gray-200 h-[2rem] w-full pl-[0.325rem] mt-1 mb-2 rounded-md cursor-not-allowed opacity-75"
+                    >
+                        <option>{avaliacao?.refeicao}</option>
+                    </select>
+
+
+                    <label className="text-white">Nota:</label>
+                    <select
+                        value={editAvaliacaoNota}
+                        onChange={(event) => setEditAvaliacaoNota(Number(event.target.value))}
+                        className="w-full mt-1 mb-2 p-2 rounded-md border"
+                    >
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+
+                <div className="w-full mb-4">
+                    <label className="text-white mb-2">Data de Consumo:</label>
+                    <input
+                        type="date"
+                        value={editAvaliacaoDataConsumo?.toISOString?.()?.split('T')[0]}
+                        max={new Date().toISOString().split('T')[0]}
+                        onChange={(e) => setEditAvaliacaoDataConsumo(new Date(e.target.value))}
+                        className="w-full p-2 rounded-md border"
+                    />
+                </div>
+
+                <div className="flex flex-col h-[12rem] w-full bg-[#A4FED3] rounded-md">
+                    <textarea
+                        value={editAvaliacaoTexto}
+                        maxLength={500}
+                        onChange={(event) => setEditAvaliacaoTexto(event.target.value)}
+                        placeholder="Digite seu comentário sobre a avaliação..."
+                        className="text-black h-full shadow-sm placeholder-black placeholder-opacity-50 mt-2 pt-[2px] border-none pl-[1rem] bg-[#A4FED3] leading-tight focus:outline-none w-full p-2 resize-none overflow-y-auto border rounded-md"
+                    />
+                </div>
+
+                <div className="flex justify-between items-center w-full mt-4">
+                    <span className="text-white text-base pl-1">
+                        {editAvaliacaoTexto.length}/500
+                    </span>
+                    <div className="flex justify-end items-center space-x-4">
+                        <button
+                            className="bg-[#A4FED3] text-[#2B895C] rounded-lg px-4 py-2 hover:scale-105 transition-all"
+                            onClick={() => {
+                                if (!editAvaliacaoTexto.trim() || editAvaliacaoNota === -1) {
+                                    toast.error("Preencha todos os campos!");
+                                }
+                                else if (!editAvaliacaoDataConsumo || editAvaliacaoDataConsumo?.toISOString().split('T')[0] > new Date().toISOString().split('T')[0]) {
+                                    toast.error("Data de consumo inválida!");
+                                }
+                                else {
+                                    const editedAvaliacao = {
+                                        texto: editAvaliacaoTexto,
+                                        nota: editAvaliacaoNota,
+                                        id_usuario: userInfo?.id,
+                                        data_consumo: editAvaliacaoDataConsumo.toISOString(),
+                                        data_avaliacao: new Date().toISOString(),
+                                        id_prato: avaliacao?.id_prato,
+                                    };
+                                    editingAvaliacao(editedAvaliacao, avaliacao?.id ?? 0);
+                                    toggleModalAvaliacao();
+                                }
+                            }}
+                        >
+                            Salvar
+                        </button>
+
+                        <button
+                            onClick={() => toggleModalAvaliacao()}
+                            className="bg-white text-[#4a71ff] border border-[#4a71ff] rounded-lg px-4 py-2 hover:bg-red-500 hover:text-white transition-all"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    if (!avaliacao) {
         return <div className="h-screen bg-gray-100"></div>;
     }
+
+        const handleDeleteAvaliacao = async (id: number) => {
+        const confirmDelete = window.confirm("Tem certeza que deseja excluir esta avaliação? Esta ação não pode ser desfeita.");
+        if (confirmDelete) {
+            try {
+                await axios.delete(`http://localhost:3000/avaliacao/${id}`);
+                toast.success("Avaliação excluída com sucesso!", { autoClose: 2000 });
+                router.push('/feed');
+            } catch (error: any) {
+                toast.error("Erro ao excluir avaliação.");
+            }
+        }
+    }
+
 
     return (
         <div className="min-h-screen bg-gray-100">
             {isModalCreateComentarioOpen && modalCreateComentario()}
             {isModalEditComentarioOpen && modalEditComentario()}
-            <HeaderLogado />
-
+            {!userInfo  ? (  
+                           <HeaderDeslogado />): (<HeaderLogado />) }
+            {userInfo && isModalEditAvaliacaoOpen && modalEditAvaliacao()}
             <div className="container mx-auto px-4 py-8">
                 <div className="w-full max-w-[45%] bg-[#49ffff] rounded-md mt-8 flex flex-col mx-auto mb-8 min-h-fit">
                     <div className="w-full max-w-[100%] flex flex-col mx-auto border-b-[1.5px] border-b-black pb-[0.7rem] mt-2">
@@ -281,13 +447,39 @@ export default function AvaliacaoDetailPage() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-center items-center mb-6 mt-4">
+                    <div className="flex space-x-4 justify-center items-center mb-6 mt-4">
                         <button
-                            onClick={toggleModalNovoComentario}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
+                            onClick={() => {
+                                if (userInfo) {
+                                    toggleModalNovoComentario();
+                                } else {
+                                    router.push('/login');
+                                }
+                            }}
+                            className="bg-yellow-400 text-white px-4 py-2 rounded-md hover:bg-yellow-600 cursor-pointer"
                         >
                             Comentar
                         </button>
+                        {userInfo && userInfo?.id === avaliacao.id_usuario && (
+                            <div className="flex space-x-2">
+                                <button
+                                    onClick={() => {
+                                        setEditAvaliacaoTexto(avaliacao.texto);
+                                        setEditAvaliacaoNota(avaliacao.nota);
+                                        setEditAvaliacaoDataConsumo(new Date(avaliacao.data_consumo));
+                                        toggleModalAvaliacao();
+                                    }}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
+                                >
+                                    Editar Avaliação
+                                </button>
+                                <button
+                                    onClick={() => handleDeleteAvaliacao(avaliacao.id)}
+                                    className='bg-red-400 text-white px-4 py-2 rounded-md hover:bg-red-700 cursor-pointer'>
+                                    Excluir
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -297,7 +489,7 @@ export default function AvaliacaoDetailPage() {
                         <p className="text-center"> Comentários </p>
                     </div>
                     {comentarios.length === 0 ? (
-                        <p> Nenhum comentário </p>
+                        <p className="text-center"> Nenhum comentário </p>
                     ) : (
                         <div className="space-y-4 bg-blue-300">
                             {comentarios.map((comentario) => (

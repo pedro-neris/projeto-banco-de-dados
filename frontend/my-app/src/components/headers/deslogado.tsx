@@ -27,15 +27,24 @@ export default function header_deslogado() {
                     </h2>
 
                     </div>
-
+                    <div className="flex flex-row items-center space-x-2 mr-2">
                     <button
-                        className="flex items-center bg-blue-700 text-white rounded-[60px] px-4 py-2 mr-2 cursor-pointer hover:bg-blue-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+                        className="flex items-center bg-white text-black rounded-[60px] px-4 py-2 hover:bg-blue-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
                         onClick={() => {
                             router.push('/login');
                         }}
                     >
                         Login
                     </button>
+                    <button
+                        className="flex items-center bg-white text-black rounded-[60px] px-4 py-2 hover:bg-blue-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+                        onClick={() => {
+                            router.push('/cadastro');
+                        }}
+                    >
+                        Cadastro
+                    </button>
+                    </div>
                 </div>
             </div>
         </header >
