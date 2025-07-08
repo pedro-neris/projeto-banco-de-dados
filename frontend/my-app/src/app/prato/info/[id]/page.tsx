@@ -26,6 +26,7 @@ export default function PratoPage() {
   const [refeicaoAvaliacao, setRefeicaoAvaliacao] = useState("");
   const [dataConsumoAvaliacao, setdataConsumoAvaliacao] = useState<Date | null>(null);
   const [pratoAvaliacao, setPratoAvaliacao] = useState<Prato | null>(null);
+  const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
 
   // Autenticação e carregamento inicial
   useEffect(() => {
@@ -48,7 +49,13 @@ export default function PratoPage() {
     axios.get(`http://localhost:3000/prato`).then(res => setPratos(res.data));
   }, [id]);
 
+  useEffect(() => {
+    if (!id) return;
 
+    axios.get(`http://localhost:3000/avaliacao/prato/${id}`)
+      .then(res => setAvaliacoes(res.data))
+      .catch(() => toast.error("Erro ao buscar avaliações."));
+  }, [id]);
 
   const resetAvaliacaoModalFields = () => {
     setTextoAvaliacao("");
@@ -74,28 +81,10 @@ export default function PratoPage() {
   const toggleModalAvaliacao = () => {
     setIsModalAvaliacaoOpen(!isModalAvaliacaoOpen);
   };
-
   const modalAvaliacao = () => (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
       <div className="h-auto text-black w-[60%] max-w-lg flex flex-col mx-auto bg-[#4a71ff] rounded-md items-center p-6">
-        <h2 className="text-white text-xl font-bold mb-4">Nova Avaliação</h2>
-
-        <select
-          value={pratoAvaliacao?.nome || "-1"}
-          className="bg-white h-[2rem] w-[90%] pl-[0.325rem] mt-5 rounded-md"
-          onChange={(event) => {
-            const selectedNome = event.target.value;
-            const selectedPrato = pratos.find((prato) => prato.nome === selectedNome) || null;
-            setPratoAvaliacao(selectedPrato);
-          }}
-        >
-          <option value="-1" disabled>Selecione o prato</option>
-          {pratos.map((prato) => (
-            <option key={prato.id} value={prato.nome}>
-              {prato.nome}
-            </option>
-          ))}
-        </select>
+        <h2 className="text-white text-xl font-bold mb-4">Nova Avaliação para {prato?.nome}</h2>
 
         <select
           value={notaAvaliacao}
@@ -157,7 +146,7 @@ export default function PratoPage() {
                   return;
                 }
 
-                if (!textoAvaliacao.trim() || notaAvaliacao === -1 || !dataConsumoAvaliacao || !pratoAvaliacao || !refeicaoAvaliacao) {
+                if (!textoAvaliacao.trim() || notaAvaliacao === -1 || !dataConsumoAvaliacao || !refeicaoAvaliacao) {
                   toast.error("Preencha todos os campos!");
                 } else {
                   const dataAvaliacao = new Date().toISOString();
@@ -166,7 +155,7 @@ export default function PratoPage() {
                     nota: notaAvaliacao,
                     data_avaliacao: dataAvaliacao,
                     data_consumo: dataConsumoAvaliacao.toLocaleDateString(),
-                    id_prato: pratoAvaliacao.id,
+                    id_prato: prato?.id,
                     id_usuario: userInfo?.id,
                     refeicao: refeicaoAvaliacao,
                   });
@@ -213,6 +202,20 @@ export default function PratoPage() {
         <div className="flex justify-center mt-4">
           <button onClick={() => router.push('/login')} className="text-white text-xl font-bold mb-4">Nova avaliação</button>
         </div>
+        <div className="mt-6">
+          <h3 className="text-lg font-bold mb-2">Avaliações</h3>
+          {avaliacoes.length > 0 ? (
+            avaliacoes.map((avaliacao, index) => (
+              <div key={index} className="border-t border-gray-200 py-2">
+                <p><strong>Nota:</strong> {avaliacao.nota}</p>
+                <p><strong>Comentário:</strong> {avaliacao.texto}</p>
+                <p><strong>Data Consumo:</strong> {avaliacao.data_consumo}</p>
+              </div>
+            ))
+          ) : (
+            <p>Sem avaliações disponíveis.</p>
+          )}
+        </div>
       </div>
     );
   }
@@ -240,7 +243,7 @@ export default function PratoPage() {
           <p>Carregando prato...</p>
         ) : prato ? (
           <div className="flex border border-blue-500 rounded p-4 max-w-lg w-full bg-white">
-            <div className="flex-1">
+            <div className="flex-1 mr-20">
               <h2 className="text-xl font-bold mb-2">{prato.nome}</h2>
               <p>Avaliações: {prato.qtd_avaliacoes}</p>
               <p>Nota Média: {prato.media_avaliacoes ? Number(prato.media_avaliacoes).toFixed(2) : 'N/A'}</p>
@@ -261,6 +264,35 @@ export default function PratoPage() {
           </div>
         ) : (
           <p>Prato não encontrado.</p>
+        )}
+      </div>
+      <div className="mt-6 px-8">
+        {avaliacoes.length > 0 ? (
+          <div
+            className={`mt-6 ${avaliacoes.length >= 3 ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' : 'flex justify-center'
+              }`}
+          >
+            {avaliacoes.map((avaliacao, index) => (
+              <div key={index}
+                className="flex flex-col border border-blue-500 rounded p-4 max-w-150 w-full bg-amber-50 m-2 hover:scale-105 transition-all cursor-pointer"
+                onClick={() => {
+                  if (avaliacao.id_usuario === userInfo?.id) {
+                    router.push('http://localhost:3001/avaliacao');
+                  } else {
+                    router.push(`/prato/info/${prato.id}`);
+                  }
+                }}>
+                <p className="text-2xl mb-4">{avaliacao.nome_usuario}</p>
+                <p><strong>Data da Avaliação:</strong> {new Date(avaliacao.data_avaliacao).toLocaleDateString('pt-BR')}</p>
+                <p><strong>Refeição:</strong> {avaliacao.refeicao}</p>
+                <p><strong>Data do Consumo:</strong> {new Date(avaliacao.data_consumo).toLocaleDateString('pt-BR')}</p>
+                <p><strong>Nota:</strong> {avaliacao.nota}</p>
+                <p><strong>Comentário:</strong> {avaliacao.texto}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="flex justify-center">Sem avaliações disponíveis.</p>
         )}
       </div>
     </div>
