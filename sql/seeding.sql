@@ -144,9 +144,9 @@ INSERT INTO Feedback (data, texto, tipo, id_setor, id_usuario) VALUES
 INSERT INTO Avaliacao (data_avaliacao, refeicao, data_consumo, nota, texto, id_usuario, id_prato) VALUES
 ('2025-01-05', 'Almoço', '2025-01-05', 5, 'Feijoada maravilhosa para começar o ano!', 1, 1),
 ('2025-02-12', 'Janta', '2025-02-12', 3, 'Macarrão um pouco sem sal', 2, 6),
-('2025-03-20', 'Almoço', '2025-03-20', 2, 'frango tava muito seco', 3, 2),
+('2025-03-20', 'Almoço', '2025-03-20', 2, 'frango tava muito seco', 4, 2),
 ('2025-04-10', 'Café da Manhã', '2025-04-10', 5, 'gostei muito', 4, 5),
-('2025-04-02', 'Almoço', '2025-05-02', 4, 'strogonoff sempre é muito bom', 5, 8);
+('2025-04-02', 'Almoço', '2025-05-02', 4, 'strogonoff sempre é muito bom', 1, 8);
 
 INSERT INTO Comentario (texto, data, id_avaliacao, id_usuario) VALUES
 ('concordo plenamente!', '2025-01-05', 1, 2),
