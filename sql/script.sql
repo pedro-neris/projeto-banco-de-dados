@@ -123,5 +123,6 @@ CREATE TABLE Cardapio_Prato
     refeicao VARCHAR(50) NOT NULL,
     PRIMARY KEY (id_cardapio, id_prato),
     FOREIGN KEY (id_cardapio) REFERENCES Cardapio(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_prato) REFERENCES Prato(id) ON DELETE CASCADE
+    FOREIGN KEY (id_prato) REFERENCES Prato(id) ON DELETE CASCADE,
+    UNIQUE (id_cardapio, id_prato, refeicao)
 );

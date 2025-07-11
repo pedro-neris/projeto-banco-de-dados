@@ -8,4 +8,4 @@ avaliacao.id_prato=prato.id
 LEFT JOIN cardapio_prato ON 
 cardapio_prato.id_prato = prato.id
 GROUP BY prato.id, prato.nome, prato.icone
-ORDER BY media_avaliacoes DESC NULLS LAST, qtd_avaliacoes DESC;
+ORDER BY media_avaliacoes DESC NULLS LAST, qtd_avaliacoes DESC, qtd_cardapios DESC;
