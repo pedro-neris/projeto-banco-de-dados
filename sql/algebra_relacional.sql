@@ -14,12 +14,12 @@ SELECT DISTINCT
     c.nome
 FROM 
     ingrediente i
-INNER JOIN ingrediente_prato ip ON i.id = ip.id_ingrediente
-INNER JOIN prato p ON ip.id_prato = p.id
-INNER JOIN cardapio_prato cp ON p.id = cp.id_prato
-INNER JOIN cardapio_restaurante cr ON cp.id_cardapio = cr.id_cardapio
-INNER JOIN restaurante r ON cr.id_restaurante = r.id
-INNER JOIN campus c ON r.id_campus = c.id
+ JOIN ingrediente_prato ip ON i.id = ip.id_ingrediente
+ JOIN prato p ON ip.id_prato = p.id
+ JOIN cardapio_prato cp ON p.id = cp.id_prato
+ JOIN cardapio_restaurante cr ON cp.id_cardapio = cr.id_cardapio
+ JOIN restaurante r ON cr.id_restaurante = r.id
+ JOIN campus c ON r.id_campus = c.id
 WHERE 
     i.restricao = 'Glúten';
 
@@ -30,9 +30,9 @@ SELECT DISTINCT
     u.username
 FROM 
     usuario u
-INNER JOIN comentario c ON u.id = c.id_usuario
-INNER JOIN avaliacao a ON c.id_avaliacao = a.id
-INNER JOIN prato p ON a.id_prato = p.id
+ JOIN comentario c ON u.id = c.id_usuario
+ JOIN avaliacao a ON c.id_avaliacao = a.id
+ JOIN prato p ON a.id_prato = p.id
 WHERE 
     p.categoria = 'Vegano';
 
@@ -43,8 +43,8 @@ SELECT DISTINCT
     p.nome
 FROM 
     avaliacao a
-INNER JOIN usuario u ON a.id_usuario = u.id
-INNER JOIN prato p ON a.id_prato = p.id
+ JOIN usuario u ON a.id_usuario = u.id
+ JOIN prato p ON a.id_prato = p.id
 WHERE 
     a.data_avaliacao = '2025-04-10'
     AND u.username = 'gabigol';
@@ -57,9 +57,9 @@ FROM restaurante r
 WHERE r.id IN (
     SELECT DISTINCT cr.id_restaurante
     FROM avaliacao a
-    INNER JOIN prato p ON a.id_prato = p.id
-    INNER JOIN cardapio_prato cp ON p.id = cp.id_prato
-    INNER JOIN cardapio_restaurante cr ON cp.id_cardapio = cr.id_cardapio
+     JOIN prato p ON a.id_prato = p.id
+     JOIN cardapio_prato cp ON p.id = cp.id_prato
+     JOIN cardapio_restaurante cr ON cp.id_cardapio = cr.id_cardapio
     WHERE a.data_avaliacao >= CURRENT_DATE - INTERVAL '30 days'
 );
 
