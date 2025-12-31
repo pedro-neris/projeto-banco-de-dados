@@ -93,31 +93,6 @@ Os **Services** concentram toda a lógica de negócios:
 - **Cálculos e agregações** (média de avaliações, estatísticas)
 - **Integração entre módulos** (relacionamentos entre entidades)
 
-### 📦 Dependências Principais
-
-```json
-{
-  "@nestjs/core": "Núcleo do framework",
-  "@nestjs/jwt": "Autenticação JWT",
-  "@nestjs/passport": "Estratégias de autenticação",
-  "class-validator": "Validação de DTOs",
-  "bcryptjs": "Hash de senhas",
-  "pg": "Driver PostgreSQL",
-  "dotenv": "Variáveis de ambiente"
-}
-```
-
-### 🔧 CORS e Configurações
-
-```typescript
-app.enableCors({
-  origin: ['http://localhost:3001', 'http://localhost:3000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-});
-```
-
 ## 🎨 Frontend - Next.js
 
 ### Tecnologias Utilizadas
