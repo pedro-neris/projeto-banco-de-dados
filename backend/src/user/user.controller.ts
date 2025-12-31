@@ -18,11 +18,11 @@ import { User } from './user.entity';
 @ApiTags('Usuários')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @ApiOperation({ summary: 'Criar novo usuário' })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'Usuário criado com sucesso',
     type: CreateUserDto,
   })
@@ -33,8 +33,8 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Listar todos os usuários' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Lista de usuários retornada com sucesso',
   })
   @Get()
@@ -44,20 +44,20 @@ export class UserController {
 
   @ApiOperation({ summary: 'Buscar usuário por email' })
   @ApiParam({ name: 'email', description: 'Email do usuário' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Usuário encontrado',
   })
   @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
-  @Get('email/:email') 
+  @Get('email/:email')
   async findByEmail(@Param('email') email: string): Promise<User | null> {
     return this.userService.findUserByEmail(email);
   }
 
   @ApiOperation({ summary: 'Buscar usuário por username' })
   @ApiParam({ name: 'username', description: 'Username do usuário' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Usuário encontrado',
   })
   @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
@@ -68,8 +68,8 @@ export class UserController {
 
   @ApiOperation({ summary: 'Buscar usuário por ID' })
   @ApiParam({ name: 'id', description: 'ID do usuário', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Usuário encontrado',
   })
   @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
@@ -80,8 +80,8 @@ export class UserController {
 
   @ApiOperation({ summary: 'Atualizar usuário' })
   @ApiParam({ name: 'id', description: 'ID do usuário', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Usuário atualizado com sucesso',
   })
   @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
@@ -97,8 +97,8 @@ export class UserController {
 
   @ApiOperation({ summary: 'Deletar usuário' })
   @ApiParam({ name: 'id', description: 'ID do usuário', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Usuário deletado com sucesso',
   })
   @ApiResponse({ status: 404, description: 'Usuário não encontrado' })

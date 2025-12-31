@@ -20,8 +20,8 @@ export class ComentarioController {
   constructor(private readonly comentarioService: ComentarioService) { }
 
   @ApiOperation({ summary: 'Criar novo comentário' })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'Comentário criado com sucesso',
   })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
@@ -32,8 +32,8 @@ export class ComentarioController {
   }
 
   @ApiOperation({ summary: 'Listar todos os comentários' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Lista de comentários retornada com sucesso',
   })
   @Get()
@@ -43,8 +43,8 @@ export class ComentarioController {
 
   @ApiOperation({ summary: 'Buscar comentário por ID' })
   @ApiParam({ name: 'id', description: 'ID do comentário', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Comentário encontrado',
   })
   @ApiResponse({ status: 404, description: 'Comentário não encontrado' })
@@ -55,8 +55,8 @@ export class ComentarioController {
 
   @ApiOperation({ summary: 'Buscar comentários de uma avaliação' })
   @ApiParam({ name: 'idAvaliacao', description: 'ID da avaliação', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Comentários da avaliação encontrados',
   })
   @Get('avaliacao/:idAvaliacao')
@@ -68,8 +68,8 @@ export class ComentarioController {
 
   @ApiOperation({ summary: 'Atualizar comentário' })
   @ApiParam({ name: 'id', description: 'ID do comentário', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Comentário atualizado com sucesso',
   })
   @ApiResponse({ status: 404, description: 'Comentário não encontrado' })
@@ -84,8 +84,8 @@ export class ComentarioController {
 
   @ApiOperation({ summary: 'Deletar comentário' })
   @ApiParam({ name: 'id', description: 'ID do comentário', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Comentário deletado com sucesso',
   })
   @ApiResponse({ status: 404, description: 'Comentário não encontrado' })

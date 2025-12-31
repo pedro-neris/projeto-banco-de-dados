@@ -5,7 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   const config = new DocumentBuilder()
     .setTitle('Sistema de Avaliação de Pratos - AvaliaRU')
     .setDescription(`
@@ -15,7 +15,7 @@ async function bootstrap() {
       como projeto acadêmico da disciplina de Banco de Dados. Os dados de avaliação são fictícios e não representam opiniões reais
       
       **Tecnologias**: NestJS, PostgreSQL, JWT, Swagger
-      **GitHub do projeto**: 
+      **GitHub do projeto**: https://github.com/halycia/Trabalho_BD
 
     `)
     .setVersion('1.0')
@@ -32,21 +32,21 @@ async function bootstrap() {
     )
     .addServer('http://localhost:3000', 'Servidor Principal (Backend API)')
     .build();
-  
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
     },
   });
-  
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
     }),
-  ); 
+  );
   app.enableCors({
     origin: ['http://localhost:3001', 'http://localhost:3000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],

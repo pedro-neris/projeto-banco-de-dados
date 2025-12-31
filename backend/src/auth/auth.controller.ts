@@ -5,16 +5,12 @@ import { InfoLogin } from './dto/infoLogin.dto';
 
 @ApiTags('Autenticação')
 @Controller('auth')
-/**
- * ⚠️ AVISO: Sistema de autenticação para fins educacionais.
- * Implementação de JWT para demonstração acadêmica.
- */
 export class AuthController {
     constructor(private authService: AuthService) { }
 
     @ApiOperation({ summary: 'Realizar login' })
-    @ApiResponse({ 
-        status: 200, 
+    @ApiResponse({
+        status: 200,
         description: 'Login realizado com sucesso. Retorna token JWT.',
         schema: {
             type: 'object',
@@ -31,8 +27,8 @@ export class AuthController {
             }
         }
     })
-    @ApiResponse({ 
-        status: 401, 
+    @ApiResponse({
+        status: 401,
         description: 'Credenciais inválidas',
         schema: {
             type: 'object',

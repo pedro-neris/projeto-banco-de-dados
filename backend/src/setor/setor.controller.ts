@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { SetorService } from './setor.service';
-import { Setor } from './setor.entity'; 
+import { Setor } from './setor.entity';
 
 @ApiTags('Setores')
 @Controller('setor')
@@ -15,11 +15,11 @@ import { Setor } from './setor.entity';
  * Dados de setores fictícios para demonstração do sistema.
  */
 export class SetorController {
-  constructor(private readonly setorService: SetorService) {}
+  constructor(private readonly setorService: SetorService) { }
 
   @ApiOperation({ summary: 'Listar todos os setores' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Lista de setores retornada com sucesso',
   })
   @Get()
@@ -29,8 +29,8 @@ export class SetorController {
 
   @ApiOperation({ summary: 'Buscar setor por ID' })
   @ApiParam({ name: 'id', description: 'ID do setor', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Setor encontrado',
   })
   @ApiResponse({ status: 404, description: 'Setor não encontrado' })
@@ -41,8 +41,8 @@ export class SetorController {
 
   @ApiOperation({ summary: 'Buscar setores por campus' })
   @ApiParam({ name: 'idCampus', description: 'ID do campus', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Setores do campus encontrados',
   })
   @Get('campus/:idCampus')

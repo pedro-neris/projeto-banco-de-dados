@@ -16,5 +16,5 @@ export class InfoLogin {
     })
     @IsString()
     @IsNotEmpty()
-    senha: string; 
+    senha: string;
 }

@@ -20,8 +20,8 @@ export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) { }
 
   @ApiOperation({ summary: 'Criar novo feedback' })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'Feedback criado com sucesso',
   })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
@@ -32,8 +32,8 @@ export class FeedbackController {
   }
 
   @ApiOperation({ summary: 'Listar todos os feedbacks' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Lista de feedbacks retornada com sucesso',
   })
   @Get()
@@ -43,8 +43,8 @@ export class FeedbackController {
 
   @ApiOperation({ summary: 'Buscar feedbacks de um usuário' })
   @ApiParam({ name: 'idusuario', description: 'ID do usuário', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Feedbacks do usuário encontrados',
   })
   @Get('user/:idusuario')
@@ -54,8 +54,8 @@ export class FeedbackController {
 
   @ApiOperation({ summary: 'Buscar feedback por ID' })
   @ApiParam({ name: 'id', description: 'ID do feedback', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Feedback encontrado',
   })
   @ApiResponse({ status: 404, description: 'Feedback não encontrado' })
@@ -66,8 +66,8 @@ export class FeedbackController {
 
   @ApiOperation({ summary: 'Atualizar feedback' })
   @ApiParam({ name: 'id', description: 'ID do feedback', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Feedback atualizado com sucesso',
   })
   @ApiResponse({ status: 404, description: 'Feedback não encontrado' })
@@ -80,8 +80,8 @@ export class FeedbackController {
 
   @ApiOperation({ summary: 'Deletar feedback' })
   @ApiParam({ name: 'id', description: 'ID do feedback', type: 'number' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Feedback deletado com sucesso',
   })
   @ApiResponse({ status: 404, description: 'Feedback não encontrado' })
