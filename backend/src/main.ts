@@ -14,14 +14,11 @@ async function bootstrap() {
       ⚠️ **AVISO**: Esta API foi desenvolvida exclusivamente para fins educacionais 
       como projeto acadêmico da disciplina de Banco de Dados. Os dados de avaliação são fictícios e não representam opiniões reais
       
-      👨‍💻 **Tecnologias**: NestJS, PostgreSQL, JWT, Swagger
+      **Tecnologias**: NestJS, PostgreSQL, JWT, Swagger
+      **GitHub do projeto**: 
+
     `)
     .setVersion('1.0')
-    .setContact(
-      'Projeto Acadêmico',
-      'https://github.com/halycia/Trabalho_BD',
-      'contato@example.com'
-    )
     .addBearerAuth(
       {
         type: 'http',
@@ -34,7 +31,6 @@ async function bootstrap() {
       'JWT-auth',
     )
     .addServer('http://localhost:3000', 'Servidor Principal (Backend API)')
-    .addServer('http://localhost:3001', 'Servidor Alternativo')
     .build();
   
   const document = SwaggerModule.createDocument(app, config);

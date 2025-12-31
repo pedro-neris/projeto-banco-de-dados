@@ -1,22 +1,25 @@
-Este projeto implementa um sistema completo de avaliação de pratos de um Restaurante Universitário desenvolvido com **NestJS** no backend e **Next.js** no frontend, utilizando **PostgreSQL** como banco de dados e **TypeScript** como linguagem de programação tanto no frontend quanto no backend.
+Este projeto implementa um sistema completo de avaliação de pratos de um Restaurante Universitário (RU) desenvolvido com **NestJS** no backend e **Next.js** no frontend, utilizando **PostgreSQL** como banco de dados e **TypeScript** como linguagem de programação tanto no frontend quanto no backend. Vale ressaltar que este projeto foi feito para fins educacionais, logo, não é um app real com opiniões sobre o RU da Universidade de Brasília. O sistema permite com que usuários avaliem, comentem e forneçam feedback sobre as refeições. Inclui funcionalidades de autenticação, gestão de usuários, avaliações, comentários e relatórios.
 
-## 📋 Visão Geral
-
-Este projeto é um sistema de feedback para pratos servidos em diferentes campus universitários, permitindo que usuários avaliem, comentem e forneçam feedback sobre as refeições. O sistema inclui funcionalidades de autenticação, gestão de usuários, avaliações, comentários e relatórios.
-
-## 🏗️ Arquitetura do Projeto
+## Ferramentas utilizadas 
+- TypeScript (linguagem comum para o backend e frontend)
+- NestJs (framework utilizado para o backend)
+- NextJs (framework utilizado para o frontend)
+- Axios (biblioteca utilizada para realizar/retornar as requisições HTTP)
+- 
+## Estrutura do projeto
 
 ```
 ├── backend/          # API REST com NestJS
 ├── frontend/         # Interface web com Next.js
 └── sql/             # Scripts de banco de dados
 ```
+## Banco de dados
+Foi utilizado um banco de dados relacional, modelado pelo grupo de acordo com as restrições e definições da aplicação. As tabelas e relacionamentos podem ser vistas na pasta 'sql/schema.sql'. 
 
-## 🚀 Backend - NestJS
-
+## Backend
 ### Arquitetura Module/Controller/Service
 
-O backend segue o padrão arquitetural do NestJS, organizando o código em módulos que encapsulam funcionalidades relacionadas:
+O backend segue o padrão arquitetural do NestJS, organizando o código em módulos que encapsulam funcionalidades relacionadas. Foram implementadas funções CRUDs comuns para todas as tabelas do banco de dados, com certas especializações em alguma das funcionalidades quando necessário (todas as funcionalidades estão documentadas no Swagger da API). 
 
 #### **Estrutura dos Módulos**
 
@@ -25,10 +28,9 @@ Cada domínio do sistema possui sua própria pasta com:
 - **Controller**: Definição das rotas e tratamento de requisições HTTP
 - **Service**: Lógica de negócios e regras de validação
 - **Entity**: Interface que define a estrutura dos dados
-- **DTOs**: Data Transfer Objects para validação de entrada
+- **DTOs**: validação de entrada quando se quer inserir/editar dados no banco de dados
 
 #### **Módulos Principais**
-
 - **AuthModule** - Autenticação e autorização JWT
 - **UserModule** - Gestão de usuários
 - **PratoModule** - Gerenciamento de pratos
@@ -41,7 +43,7 @@ Cada domínio do sistema possui sua própria pasta com:
 
 ### 🔗 Conexão com Banco de Dados
 
-O banco de dados foi conectado diretamente com a aplicação, utilizando variáveis locais e utilizando a biblioteca .... Demais informações podem ser encontradas na pasta '\backend\src\database'. Variáveis de ambiente também foram utilizadas para executar esta conexão de forma segura, e é possível observar os logs com os status de resposta das *queries* SQL e seus tempos de conexão.
+O banco de dados foi conectado diretamente com a aplicação, utilizando variáveis de ambiente e a biblioteca **pg** (node-postgres). Demais informações podem ser encontradas na pasta '\backend\src\database'. Variáveis de ambiente também foram utilizadas para executar esta conexão de forma segura, e é possível observar os logs com os status de resposta das *queries* SQL e seus tempos de conexão.
 
 ### 🛡️ Validação de Requisições HTTP
 
@@ -128,43 +130,39 @@ O banco PostgreSQL possui as seguintes entidades principais:
 - `popular_img.sql` - População de imagens
 - `algebra_relacional.sql` - Consultas em álgebra relacional
 
-## 🚀 Como Executar o Projeto
+## Execução do projeto
 
 ### Pré-requisitos
 
-- **Node.js** (v18 ou superior) - [Download aqui](https://nodejs.org/)
+- **Node.js** - [Download aqui](https://nodejs.org/)
 - **PostgreSQL** - [Download aqui](https://www.postgresql.org/download/)
-- **npm** ou **yarn** (vem com Node.js)
+
 ### 🗄️ 1. Configuração do Banco de Dados
 
-#### Passo 1: Criar banco PostgreSQL
+#### Passo 1: Criar banco PostgreSQL (utilizando pgAdmin)
 ```sql
 CREATE DATABASE avaliarudb;
 ```
 
 #### Passo 2: Executar scripts SQL
-
-**🚀 Opção 1 - Script Principal (Recomendado):**
 ```bash
 cd sql
 psql -U seu_usuario -d avaliaru -f script.sql
 ```
+#### Passo 3 (opcional): executar o seeding do banco de dados para simular dados pré-existentes
+```bash
+cd sql
+psql -U seu_usuario -d avaliaru -f seeding.sql
+```
 
-
-
-### 🔧 2. Configuração do Backend (API)
+###  2. Configuração do Backend (API)
 
 ```bash
-# 1. Navegue para a pasta do backend
 cd backend
-
-# 2. Instale as dependências
 npm install
-
-# 3. Instale o Swagger (documentação da API)
 npm install @nestjs/swagger@^8.0.0
 
-# 4. Configure variáveis de ambiente 
+# Configuração das variáveis de ambiente 
 # Edite o arquivo .env no diretório backend/ com suas credenciais:
 # DB_HOST=localhost
 # DB_PORT=5432
@@ -182,21 +180,9 @@ cd frontend/my-app
 npm install
 npm run dev
 ```
-## 🔗 Como o Frontend Consome a API do Backend
+## 🔗 Como o Frontend consome a API 
 
-O frontend Next.js se comunica com a API NestJS através de requisições HTTP usando **Axios**. Esta comunicação segue o padrão REST e utiliza autenticação JWT.
-
-### 🌐 Configuração de Portas
-
-- **Backend (API)**: `http://localhost:3000`
-- **Frontend (Interface)**: `http://localhost:3001`
-
-### 🔧 Configuração do Axios
-
-O frontend possui uma instância configurada do Axios que:
-- **URL Base**: `http://localhost:3000` (API do backend)
-- **Headers**: Inclui automaticamente o token JWT quando o usuário está logado
-- **Interceptadores**: Gerencia tokens expirados e redirecionamentos
+O frontend Next.js se comunica com a API NestJS através de requisições HTTP usando **Axios**. Esta comunicação segue o padrão REST e utiliza autenticação JWT. O frontend utiliza os endpoints da API, e recebe a resposta para mostrar na 
 
 ### 🔐 Fluxo de Autenticação
 
@@ -210,7 +196,7 @@ O frontend possui uma instância configurada do Axios que:
    - Backend valida o token em cada requisição
    - Usuário tem acesso aos dados protegidos
 
-### 🛡️ Tratamento de Erros
+### Tratamento de Erros
 
 O frontend trata diversos cenários:
 - **Token expirado**: Redireciona para login
