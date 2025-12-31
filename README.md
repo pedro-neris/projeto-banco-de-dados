@@ -1,3 +1,13 @@
+<h2> Autores</h2>
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/arthurxsz" target="_blank"><img style="border-radius: 50%;" src="https://github.com/arthurxsz.png" width="100px;" alt="Arthur Bispo"/><br /><sub><b>Arthur Bispo</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/gabrielpr208" target="_blank"><img style="border-radius: 50%;" src="https://github.com/gabrielpr208.png" width="100px;" alt="Gabriel Rodrigues"/><br /><sub><b>Gabriel Rodrigues</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/https://github.com/halycia" target="_blank"><img style="border-radius: 50%;" src="https://github.com/https://github.com/halycia.png" width="100px;" alt="Halycia Oliveira"/><br /><sub><b>Halycia Oliveira</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/pedro-neris" target="_blank"><img style="border-radius: 50%;" src="https://github.com/pedro-neris.png" width="100px;" alt="Pedro Neris"/><br /><sub><b>Pedro Neris </b></sub></a><br /></td>
+</table>
+
 Este projeto implementa um sistema completo de avaliação de pratos de um Restaurante Universitário (RU). O sistema permite com que usuários avaliem, comentem e forneçam feedback sobre as refeições. Inclui funcionalidades de autenticação, gestão de usuários, avaliações, comentários e relatórios. Vale ressaltar que este projeto foi feito para fins educacionais, logo, não é um app real com opiniões sobre o RU da Universidade de Brasília. 
 
 ## Ferramentas utilizadas 
