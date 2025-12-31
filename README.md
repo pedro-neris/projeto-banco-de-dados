@@ -53,11 +53,11 @@ Cada domínio do sistema possui sua própria pasta com:
 - **Entity**: Interface que define a estrutura dos dados
 - **DTOs**: validação de entrada quando se quer inserir/editar dados no banco de dados
 
-### 🔗 Conexão com Banco de Dados
+###  Conexão com Banco de Dados
 
-O banco de dados foi conectado diretamente com a aplicação, utilizando variáveis de ambiente e a biblioteca **pg** (node-postgres). Demais informações podem ser encontradas na pasta '\backend\src\database'. Variáveis de ambiente também foram utilizadas para executar esta conexão de forma segura, e é possível observar os logs com os status de resposta das *queries* SQL e seus tempos de conexão.
+O banco de dados foi conectado diretamente com a aplicação, utilizando variáveis de ambiente e a biblioteca **pg** (node-postgres). Demais informações podem ser encontradas na pasta '\backend\src\database'. Variáveis de ambiente também foram utilizadas para executar esta conexão de forma segura, e é possível observar os logs com os status de resposta das queries SQL e seus tempos de conexão.
 
-### 🛡️ Validação de Requisições HTTP
+###  Validação de Requisições HTTP
 
 O sistema utiliza **class-validator** e **class-transformer** para validação de requisições, sendo criados DTOs para os tipos create/update que recebem argumentos da requisição, garantindo com que esses argumentos sejam consistentes com as especificações do banco, cumprindo, assim, o contrato da API.
 
@@ -83,7 +83,7 @@ O sistema utiliza **class-validator** e **class-transformer** para validação d
 - **Node.js** - [Download aqui](https://nodejs.org/)
 - **PostgreSQL** - [Download aqui](https://www.postgresql.org/download/)
 
-### 🗄️ 1. Configuração do Banco de Dados
+###  1. Configuração do Banco de Dados
 
 #### Passo 1: Criar banco PostgreSQL (utilizando pgAdmin)
 ```sql
@@ -120,15 +120,15 @@ npm install @nestjs/swagger@^8.0.0
 npm run start:dev
 ```
 
-### 🌐 3. Configuração do Frontend (Interface Web)
+###  3. Configuração do Frontend (Interface Web)
 ```bash
-cd frontend/my-app
+cd frontend
 npm install
 npm run dev
 ```
 - Obs: o backend deve ser inicializado antes do frontend
 
-## 🔗 Como o Frontend consome a API 
+##  Como o Frontend consome a API 
 
 O frontend Next.js se comunica com a API NestJS através de requisições HTTP usando **Axios**. Esta comunicação segue o padrão REST e utiliza autenticação JWT. O frontend utiliza os endpoints da API, e recebe a resposta para mostrar na interface web (métodos GET), ou envia requisições com argumentos coletados na interface para alterar o banco de dados (métodos POST, PUT e DELETE). 
 
@@ -151,7 +151,6 @@ O frontend Next.js se comunica com a API NestJS através de requisições HTTP u
 
 ###  **Interface Web (Frontend)**
 - **URL**: `http://localhost:3001`
-- **Funcionalidades**: Cadastro, login, avaliações, feed de posts
 
 ###  **API diretamente (backend)**
 - **URL Base**: `http://localhost:3000`
